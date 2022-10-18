@@ -18,3 +18,6 @@ FetchContent_MakeAvailable(googletest)
 add_executable(${PROJECT_NAME} ${SOURCES})
 target_include_directories(${PROJECT_NAME} PUBLIC ${MATRIX_DOT_LIB_INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} ${MATRIX_DOT_LIB_LIBRARIES} GTest::gtest_main)
+
+include(GoogleTest)
+gtest_discover_tests(${PROJECT_NAME})

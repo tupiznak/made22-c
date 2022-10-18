@@ -117,7 +117,7 @@ TEST(MatrixDot, Dot) {
     for (int i = 0; i < matrix_a.rows; ++i) {
         matrix_check.arr[i][0] = 5 + 9 * i;
         matrix_check.arr[i][1] = 14 + 36 * i;
-    }; //  np.dot(a, b)
+    } //  np.dot(a, b)
 
     Operation result = Matrix_dot(matrix_a, matrix_b);
     EXPECT_EQ(true, result.success);

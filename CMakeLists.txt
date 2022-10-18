@@ -8,6 +8,7 @@ message("MATRIX_DOT_LIB_LIBRARIES = ${MATRIX_DOT_LIB_LIBRARIES}")
 
 add_executable(${PROJECT_NAME} main.c)
 
+set(CMAKE_C_FLAGS ${CMAKE_C_FLAGS} "-Wall -Wpedantic -Wextra -Werror")
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -coverage -lgcov")
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${MATRIX_DOT_LIB_INCLUDE_DIRS})

@@ -8,9 +8,12 @@ message("MATRIX_DOT_LIB_LIBRARIES = ${MATRIX_DOT_LIB_LIBRARIES}")
 
 add_executable(${PROJECT_NAME} main.c)
 
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -coverage -lgcov" )
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -coverage -lgcov")
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${MATRIX_DOT_LIB_INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} PRIVATE ${MATRIX_DOT_LIB_LIBRARIES})
 
+enable_testing()
+include(GoogleTest)
 add_subdirectory(tests)
+gtest_discover_tests(matrix_dot)

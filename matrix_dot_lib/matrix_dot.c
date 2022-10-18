@@ -3,12 +3,12 @@
 Matrix Matrix_constructor(int rows, int columns, bool with_zeros) {
     int **arr = (int **) malloc(rows * sizeof(int *));
     if (with_zeros) {
-        for (int r = 0; r < rows; ++r) {
-            arr[r] = (int *) calloc(columns, sizeof(int));
+        for (int i = 0; i < rows; ++i) {
+            arr[i] = (int *) calloc(columns, sizeof(int));
         }
     } else {
-        for (int r = 0; r < rows; ++r) {
-            arr[r] = (int *) malloc(columns * sizeof(int));
+        for (int i = 0; i < rows; ++i) {
+            arr[i] = (int *) malloc(columns * sizeof(int));
         }
     }
     Matrix matrix = {
@@ -27,9 +27,9 @@ Matrix Matrix_zeros_constructor(int rows, int columns) {
     return Matrix_constructor(rows, columns, true);
 }
 
-Matrix Matrix_destructor(Matrix matrix) {
-    for (int r = 0; r < matrix.rows; ++r) {
-        free(matrix.arr[r]);
+void Matrix_destructor(Matrix matrix) {
+    for (int i = 0; i < matrix.rows; ++i) {
+        free(matrix.arr[i]);
     }
     free(matrix.arr);
 }
@@ -39,12 +39,14 @@ bool Matrix_is_can_dot(Matrix matrix_a, Matrix matrix_b) {
 }
 
 bool Matrix_is_equal(Matrix matrix_a, Matrix matrix_b) {
-    if (matrix_a.columns != matrix_b.columns || matrix_a.rows != matrix_b.rows)
+    if (matrix_a.columns != matrix_b.columns || matrix_a.rows != matrix_b.rows) {
         return false;
+    }
     for (int i = 0; i < matrix_a.rows; ++i) {
         for (int j = 0; j < matrix_a.columns; ++j) {
-            if (matrix_a.arr[i][j] != matrix_b.arr[i][j])
+            if (matrix_a.arr[i][j] != matrix_b.arr[i][j]) {
                 return false;
+            }
         }
     }
     return true;

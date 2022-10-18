@@ -1,5 +1,5 @@
-#ifndef MATRIX_DOT_H
-#define MATRIX_DOT_H
+#ifndef MADE22_C_MATRIX_DOT_LIB_MATRIX_DOT_H_
+#define MADE22_C_MATRIX_DOT_LIB_MATRIX_DOT_H_
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -24,7 +24,7 @@ Matrix Matrix_empty_constructor(int rows, int columns);
 
 Matrix Matrix_zeros_constructor(int rows, int columns);
 
-Matrix Matrix_destructor(Matrix matrix);
+void Matrix_destructor(Matrix matrix);
 
 bool Matrix_is_can_dot(Matrix matrix_a, Matrix matrix_b);
 
@@ -35,4 +35,4 @@ Operation Matrix_compute_new_element(Matrix matrix_a, Matrix matrix_b, Matrix ma
 
 Operation Matrix_dot(Matrix matrix_a, Matrix matrix_b);
 
-#endif // MATRIX_DOT_H
+#endif  // MADE22_C_MATRIX_DOT_LIB_MATRIX_DOT_H_

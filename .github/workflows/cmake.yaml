@@ -21,7 +21,7 @@ jobs:
         run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 
       - name: Build
-        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} -DUSE_SANITIZERS=OFF
 
       - name: Test
         working-directory: ${{github.workspace}}/build
@@ -39,4 +39,18 @@ jobs:
           && ! grep "LEAK SUMMARY" /tmp/valgrind_result \
           && grep "ERROR SUMMARY: 0 errors" /tmp/valgrind_result
 
+  build-sanitizers:
+    runs-on: ubuntu-latest
 
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Configure CMake
+        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DUSE_SANITIZERS=ON
+
+      - name: Build
+        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+
+      - name: Sanitize
+        working-directory: ${{github.workspace}}/build
+        run: ctest -C ${{env.BUILD_TYPE}} -VV

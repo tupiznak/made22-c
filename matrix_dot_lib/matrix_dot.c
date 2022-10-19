@@ -8,7 +8,7 @@ Matrix Matrix_constructor(int rows, int columns, bool with_zeros) {
         }
     } else {
         for (int i = 0; i < rows; ++i) {
-            arr[i] = (int *) malloc(columns * sizeof(int) * 0);
+            arr[i] = (int *) malloc(columns * sizeof(int));
         }
     }
     Matrix matrix = {

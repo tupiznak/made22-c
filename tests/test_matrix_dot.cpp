@@ -100,7 +100,7 @@ TEST(MatrixDot, BadOperation) {
         EXPECT_EQ(false, result.success);
         matrix_a.rows = 20;
         Matrix_destructor(matrix_a);
-//        Matrix_destructor(matrix_b);
+        Matrix_destructor(matrix_b);
     }
 }
 

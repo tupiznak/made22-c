@@ -36,6 +36,7 @@ jobs:
         run: |
           valgrind --tool=memcheck --leak-check=yes -s --log-fd=1 ./tests/test_matrix_dot > /tmp/valgrind_result \
           && cat /tmp/valgrind_result \
-          && ! grep "LEAK SUMMARY" /tmp/valgrind_result
+          && ! grep "LEAK SUMMARY" /tmp/valgrind_result \
+          && grep "ERROR SUMMARY: 0 errors" /tmp/valgrind_result
 
 

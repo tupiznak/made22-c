@@ -58,6 +58,7 @@ TEST(MatrixDot, ElementProcessing) {
         }
         Matrix_destructor(matrix_a);
         Matrix_destructor(matrix_b);
+        Matrix_destructor(matrix_result);
     }
     {
         Matrix matrix_a = Matrix_zeros_constructor(20, 10);
@@ -67,6 +68,7 @@ TEST(MatrixDot, ElementProcessing) {
         EXPECT_EQ(false, result.success);
         Matrix_destructor(matrix_a);
         Matrix_destructor(matrix_b);
+        Matrix_destructor(matrix_result);
     }
     {
         Matrix matrix_a = Matrix_zeros_constructor(20, 10);
@@ -76,6 +78,7 @@ TEST(MatrixDot, ElementProcessing) {
         EXPECT_EQ(false, result.success);
         Matrix_destructor(matrix_a);
         Matrix_destructor(matrix_b);
+        Matrix_destructor(matrix_result);
     }
 }
 
@@ -95,6 +98,7 @@ TEST(MatrixDot, BadOperation) {
         matrix_a.rows = -1;
         Operation result = Matrix_dot(matrix_a, matrix_b);
         EXPECT_EQ(false, result.success);
+        matrix_a.rows = 20;
         Matrix_destructor(matrix_a);
         Matrix_destructor(matrix_b);
     }
@@ -130,6 +134,7 @@ TEST(MatrixDot, Dot) {
     EXPECT_EQ(false, Matrix_is_equal(*result.matrix, matrix_check));
     Matrix_destructor(matrix_a);
     Matrix_destructor(matrix_b);
+    Matrix_destructor(matrix_check);
     Matrix_destructor(*result.matrix);
     free(result.matrix);
 }

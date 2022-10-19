@@ -26,5 +26,5 @@ jobs:
 
       - name: Linters
         working-directory: ${{github.workspace}}
-        run: sudo apt install -y cppcheck cpplint clang && ./linters/run.sh
+        run: sudo apt install -y cppcheck python-pip clang && pip install cpplint && ./linters/run.sh
 

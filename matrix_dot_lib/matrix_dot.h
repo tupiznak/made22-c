@@ -1,5 +1,5 @@
-#ifndef MADE22_C_MATRIX_DOT_LIB_MATRIX_DOT_H_
-#define MADE22_C_MATRIX_DOT_LIB_MATRIX_DOT_H_
+#ifndef MATRIX_DOT_LIB_MATRIX_DOT_H_
+#define MATRIX_DOT_LIB_MATRIX_DOT_H_
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -35,4 +35,4 @@ Operation Matrix_compute_new_element(Matrix matrix_a, Matrix matrix_b, Matrix ma
 
 Operation Matrix_dot(Matrix matrix_a, Matrix matrix_b);
 
-#endif  // MADE22_C_MATRIX_DOT_LIB_MATRIX_DOT_H_
+#endif  // MATRIX_DOT_LIB_MATRIX_DOT_H_

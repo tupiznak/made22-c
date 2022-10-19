@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Install packages
-        run: sudo apt install -y cppcheck python3-pip clang valgrind && pip install cpplint
+        run: sudo apt install -y cppcheck python3-pip clang valgrind lcov && pip install cpplint
 
       - name: Configure CMake
         run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DUSE_SANITIZERS=OFF
@@ -26,6 +26,12 @@ jobs:
       - name: Test
         working-directory: ${{github.workspace}}/build
         run: ctest -C ${{env.BUILD_TYPE}} -VV
+
+      - name: Coverage
+        working-directory: ${{github.workspace}}/build
+        run: |
+          lcov -t "tests/CMakeFiles/test_matrix_dot" -o coverage.info -c -d matrix_dot_lib/ \
+          && genhtml -o report coverage.info
 
       - name: Linters
         working-directory: ${{github.workspace}}

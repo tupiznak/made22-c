@@ -14,6 +14,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Install packages
+        run: sudo apt install -y cppcheck python3-pip clang && pip install cpplint
+
       - name: Configure CMake
         run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 
@@ -26,5 +29,5 @@ jobs:
 
       - name: Linters
         working-directory: ${{github.workspace}}
-        run: sudo apt install -y cppcheck python-pip clang && pip install cpplint && ./linters/run.sh
+        run: ./linters/run.sh
 

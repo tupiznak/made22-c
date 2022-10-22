@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.14)
-project(test_matrix_operations)
+project(test_matrix_calc)
 
 set(CMAKE_CXX_STANDARD 14)
 
@@ -27,8 +27,8 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(googletest)
 
 add_executable(${PROJECT_NAME} ${SOURCES})
-target_include_directories(${PROJECT_NAME} PUBLIC ${MATRIX_OPERATIONS_LIB_INCLUDE_DIRS})
-target_link_libraries(${PROJECT_NAME} ${MATRIX_OPERATIONS_LIB_LIBRARIES} GTest::gtest_main)
+target_include_directories(${PROJECT_NAME} PUBLIC ${MATRIX_CALC_LIB_INCLUDE_DIRS})
+target_link_libraries(${PROJECT_NAME} ${MATRIX_CALC_LIB_LIBRARIES} GTest::gtest_main)
 
 include(GoogleTest)
 gtest_discover_tests(${PROJECT_NAME})

@@ -8,18 +8,13 @@ struct Matrix {
 public:
     Matrix();
 
-    explicit Matrix(std::vector<double> vector);
+    Matrix(const Matrix &);
+
+    explicit Matrix(std::vector<double> const &vector);
+
+    Matrix &operator=(const Matrix &rhs);
 
     std::vector<double> &GetData();
-
-    Matrix(const Matrix &matrix);
-
-    Matrix &operator=(const Matrix &rhs) {
-        if (this != &rhs) {
-            Matrix(rhs).swap(*this);
-        }
-        return *this;
-    }
 
     void swap(Matrix &other);
 

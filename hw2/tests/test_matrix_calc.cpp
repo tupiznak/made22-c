@@ -2,7 +2,7 @@
 #include "matrix_calc.h"
 
 TEST(MatrixCalc, ConstructorDestructorMatrix) {
-    auto row = std::vector<double>{3, 4, 5, 6, 4, 4, 4, 4, 42, 2, 23};
+    auto row = std::vector<double>{3, 4, 5, 6, 4.9, 4, 4, 4, 42, 2, 23};
     row.push_back(3);
     std::vector<double> dupRow = row;
     auto matrix1 = new Matrix(row);

@@ -5,17 +5,26 @@
 
 struct Matrix {
 public:
+    // constructors
     Matrix() = default;
 
-    template<unsigned int ROWS, unsigned int COLUMNS>
+    template<unsigned ROWS, unsigned COLUMNS>
     explicit Matrix(double **arr);
 
-    Matrix(double **arr, unsigned int rows, unsigned int columns);
+    Matrix(double **arr, unsigned rows, unsigned columns);
 
     Matrix(const Matrix &);
 
     ~Matrix();
 
+    void swap(Matrix &);
+
+    template<unsigned ROWS, unsigned COLUMNS>
+    static Matrix ValueInited(double val);
+
+    static Matrix ValueInited(double val, unsigned rows, unsigned columns);
+
+    // operators
     Matrix &operator=(const Matrix &);
 
     Matrix operator+(double);
@@ -28,18 +37,13 @@ public:
 
     double operator()(unsigned row, unsigned col) const;
 
-    template<unsigned int ROWS, unsigned int COLUMNS>
-    static Matrix ValueInited(double val);
-
-    static Matrix ValueInited(double val, unsigned int rows, unsigned int columns);
+    // functions
     static void add(const Matrix &, double value);
-
-    void swap(Matrix &);
 
 
 private:
     double **matrix_arr;
-    unsigned int matrix_rows, matrix_columns;
+    unsigned matrix_rows, matrix_columns;
 };
 
 

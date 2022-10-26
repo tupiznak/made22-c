@@ -7,7 +7,7 @@ Matrix &Matrix::operator=(const Matrix &other) {
     return *this;
 }
 
-double Matrix::operator()(unsigned int row, unsigned int col) const {
+double Matrix::operator()(unsigned row, unsigned col) const {
     if (row >= matrix_rows || col >= matrix_columns)
         throw std::out_of_range("out of bounds");
     return matrix_arr[row][col];
@@ -17,8 +17,8 @@ bool Matrix::operator==(const Matrix &other) const {
     if (matrix_rows != other.matrix_rows || matrix_columns != other.matrix_columns) {
         return false;
     }
-    for (unsigned int i = 0; i < matrix_rows; ++i) {
-        for (unsigned int j = 0; j < matrix_columns; ++j) {
+    for (unsigned i = 0; i < matrix_rows; ++i) {
+        for (unsigned j = 0; j < matrix_columns; ++j) {
             if (matrix_arr[i][j] != other.matrix_arr[i][j]) {
                 return false;
             }

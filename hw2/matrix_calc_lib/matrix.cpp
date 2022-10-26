@@ -53,3 +53,11 @@ Matrix Matrix::ValueInited(double val) {
     return Matrix::ValueInited(val, ROWS, COLUMNS);
 }
 
+void Matrix::add(const Matrix &matrix, double value) {
+    for (unsigned int i = 0; i < matrix.matrix_rows; ++i) {
+        for (unsigned int j = 0; j < matrix.matrix_columns; ++j) {
+            matrix.matrix_arr[i][j] += value;
+        }
+    }
+}
+

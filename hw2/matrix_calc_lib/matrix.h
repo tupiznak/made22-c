@@ -17,10 +17,13 @@ public:
     ~Matrix();
 
     Matrix &operator=(const Matrix &);
-    Matrix &operator+(double );
-    Matrix &operator+=(double );
+
+    Matrix operator+(double);
+
+    Matrix &operator+=(double);
 
     bool operator==(const Matrix &) const;
+
     bool operator!=(const Matrix &) const;
 
     double operator()(unsigned row, unsigned col) const;
@@ -29,6 +32,7 @@ public:
     static Matrix ValueInited(double val);
 
     static Matrix ValueInited(double val, unsigned int rows, unsigned int columns);
+    static void add(const Matrix &, double value);
 
     void swap(Matrix &);
 

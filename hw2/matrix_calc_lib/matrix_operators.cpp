@@ -27,17 +27,15 @@ bool Matrix::operator==(const Matrix &other) const {
     return true;
 }
 
-Matrix &Matrix::operator+(double val) {
-    for (unsigned int i = 0; i < matrix_rows; ++i) {
-        for (unsigned int j = 0; j < matrix_columns; ++j) {
-            matrix_arr[i][j] += val;
-        }
-    }
-    return *this;
+Matrix Matrix::operator+(double val) {
+    auto new_matrix = Matrix(*this);
+    Matrix::add(new_matrix, val);
+    return {new_matrix};
 }
 
 Matrix &Matrix::operator+=(double val) {
-    return *this + val;
+    Matrix::add(*this, val);
+    return *this;
 }
 
 bool Matrix::operator!=(const Matrix &other) const {

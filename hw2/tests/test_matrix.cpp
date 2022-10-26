@@ -22,4 +22,7 @@ TEST(Matrix, ConstructorDestructorCompareMatrix) {
     matrix0 += 10;
     EXPECT_NE(matrix0, matrix2);
 
+    EXPECT_EQ(matrix0, matrix2 + 10);
+    EXPECT_EQ(2, matrix2(6, 1));
+
 }

@@ -13,6 +13,7 @@ public:
     explicit Matrix(std::vector<double> const &vector);
 
     Matrix &operator=(const Matrix &rhs);
+//    Matrix &operator[](const int);
 
     std::vector<double> &GetData();
 

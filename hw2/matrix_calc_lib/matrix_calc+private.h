@@ -9,13 +9,8 @@ struct Matrix::MatrixImpl {
 public:
     void SetItems(std::vector<double> const &data);
 
-    std::vector<double> &GetItems() {
-        return items;
-    };
+    std::vector<double> &GetItems();
 
-    void swap(MatrixImpl &other) {
-        std::swap(items, other.items);
-    };
 private:
     std::vector<double> items;
 };

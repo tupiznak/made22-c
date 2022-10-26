@@ -17,5 +17,8 @@ TEST(MatrixCalc, ConstructorDestructorMatrix) {
         EXPECT_DOUBLE_EQ(dupRow[i], vecFromMatrix[i]);
     }
 
+    Matrix matrix2;
+    matrix2 = *matrix1;
+
     delete matrix1;
 }

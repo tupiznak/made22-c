@@ -37,3 +37,17 @@ TEST(Matrix, DiagRowColumn) {
     EXPECT_EQ(Matrix::ValueInited(8, 1, 3), matrix0.row(2));
     EXPECT_EQ(Matrix::ValueInited(8, 5, 1), matrix0.column(0));
 }
+
+TEST(Matrix, ElementOperations) {
+    EXPECT_EQ(Matrix::ValueInited(2, 5, 3),
+              Matrix::ElementSum(Matrix::ValueInited(1, 5, 3),
+                                 Matrix::ValueInited(1, 5, 3)));
+    EXPECT_EQ(Matrix::ValueInited(5, 5, 3),
+              Matrix::ElementSub(Matrix::ValueInited(6, 5, 3),
+                                 Matrix::ValueInited(1, 5, 3)));
+    EXPECT_EQ(Matrix::ValueInited(25, 5, 3),
+              Matrix::ElementMul(Matrix::ValueInited(5, 5, 3),
+                                 Matrix::ValueInited(5, 5, 3)));
+    ASSERT_THROW(Matrix::ElementSub(Matrix::ValueInited(6, 2, 3),
+                                    Matrix::ValueInited(1, 5, 3)), std::out_of_range);
+}

@@ -101,3 +101,10 @@ Matrix Matrix::column(unsigned int column) {
     }
     return vector;
 }
+
+bool Matrix::IsEqualShape(const Matrix &other) const {
+    if (matrix_rows != other.matrix_rows || matrix_columns != other.matrix_columns) {
+        return false;
+    }
+    return true;
+}

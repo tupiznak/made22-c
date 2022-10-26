@@ -23,6 +23,7 @@ public:
     static Matrix ValueInited(double val);
 
     static Matrix ValueInited(double val, unsigned rows, unsigned columns);
+
     static Matrix EmptyInited(unsigned rows, unsigned columns);
 
     // operators
@@ -39,10 +40,27 @@ public:
     double &operator()(unsigned row, unsigned col) const;
 
     // functions
+    bool IsEqualShape(const Matrix &) const;
+
     static void add(const Matrix &, double value);
+
     Matrix diagonal();
+
     Matrix row(unsigned row);
+
     Matrix column(unsigned column);
+
+    enum operation {
+        sum, sub, mul
+    };
+
+    static Matrix ElementOperation(const Matrix &, const Matrix &, operation);
+
+    static Matrix ElementSum(const Matrix &, const Matrix &);
+
+    static Matrix ElementMul(const Matrix &, const Matrix &);
+
+    static Matrix ElementSub(const Matrix &, const Matrix &);
 
 
 private:

@@ -14,7 +14,7 @@ double &Matrix::operator()(unsigned row, unsigned col) const {
 }
 
 bool Matrix::operator==(const Matrix &other) const {
-    if (matrix_rows != other.matrix_rows || matrix_columns != other.matrix_columns) {
+    if (!IsEqualShape(other)) {
         return false;
     }
     for (unsigned i = 0; i < matrix_rows; ++i) {

@@ -23,6 +23,7 @@ public:
     static Matrix ValueInited(double val);
 
     static Matrix ValueInited(double val, unsigned rows, unsigned columns);
+    static Matrix EmptyInited(unsigned rows, unsigned columns);
 
     // operators
     Matrix &operator=(const Matrix &);
@@ -35,10 +36,13 @@ public:
 
     bool operator!=(const Matrix &) const;
 
-    double operator()(unsigned row, unsigned col) const;
+    double &operator()(unsigned row, unsigned col) const;
 
     // functions
     static void add(const Matrix &, double value);
+    Matrix diagonal();
+    Matrix row(unsigned row);
+    Matrix column(unsigned column);
 
 
 private:

@@ -24,5 +24,16 @@ TEST(Matrix, ConstructorDestructorCompareMatrix) {
 
     EXPECT_EQ(matrix0, matrix2 + 10);
     EXPECT_EQ(2, matrix2(6, 1));
+}
 
+
+TEST(Matrix, DiagRowColumn) {
+    auto matrix0 = Matrix::ValueInited(8, 5, 3);
+    matrix0(1, 1) = 2;
+    auto matrix_check = Matrix::ValueInited(8, 1, 3);
+    matrix_check(0, 1) = 2;
+
+    EXPECT_EQ(matrix_check, matrix0.diagonal());
+    EXPECT_EQ(Matrix::ValueInited(8, 1, 3), matrix0.row(2));
+    EXPECT_EQ(Matrix::ValueInited(8, 5, 1), matrix0.column(0));
 }

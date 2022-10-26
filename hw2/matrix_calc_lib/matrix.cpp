@@ -45,6 +45,22 @@ Matrix Matrix::ValueInited(double value, unsigned rows, unsigned columns) {
     return mx;
 }
 
+Matrix Matrix::EmptyInited(unsigned int rows, unsigned int columns) {
+    auto mx = Matrix{};
+
+    auto matrix_arr = new double *[rows];
+    for (unsigned i = 0; i < rows; ++i) {
+        matrix_arr[i] = new double[columns];
+    }
+
+    mx.matrix_arr = matrix_arr;
+    mx.matrix_rows = rows;
+    mx.matrix_columns = columns;
+
+    return mx;
+}
+
+
 template<unsigned ROWS, unsigned COLUMNS>
 Matrix::Matrix(double **arr) : Matrix(arr, ROWS, COLUMNS) {}
 
@@ -61,3 +77,27 @@ void Matrix::add(const Matrix &matrix, double value) {
     }
 }
 
+Matrix Matrix::diagonal() {
+    auto diag_len = std::min(matrix_rows, matrix_columns);
+    auto vector = Matrix::EmptyInited(1, diag_len);
+    for (unsigned i = 0; i < diag_len; ++i) {
+        vector.matrix_arr[0][i] = matrix_arr[i][i];
+    }
+    return vector;
+}
+
+Matrix Matrix::row(unsigned row) {
+    auto vector = Matrix::EmptyInited(1, matrix_columns);
+    for (unsigned i = 0; i < matrix_columns; ++i) {
+        vector.matrix_arr[0][i] = matrix_arr[row][i];
+    }
+    return vector;
+}
+
+Matrix Matrix::column(unsigned int column) {
+    auto vector = Matrix::EmptyInited(matrix_rows, 1);
+    for (unsigned i = 0; i < matrix_rows; ++i) {
+        vector.matrix_arr[i][0] = matrix_arr[i][column];
+    }
+    return vector;
+}

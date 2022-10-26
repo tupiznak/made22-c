@@ -8,8 +8,9 @@ Matrix &Matrix::operator=(const Matrix &other) {
 }
 
 double &Matrix::operator()(unsigned row, unsigned col) const {
-    if (row >= matrix_rows || col >= matrix_columns)
+    if (!IsInBounds(row, col)) {
         throw std::out_of_range("out of bounds");
+    }
     return matrix_arr[row][col];
 }
 

@@ -42,6 +42,10 @@ public:
     // functions
     bool IsEqualShape(const Matrix &) const;
 
+    bool IsCanDot(const Matrix &) const;
+
+    bool IsInBounds(unsigned row, unsigned col) const;
+
     static void add(const Matrix &, double value);
 
     Matrix diagonal();
@@ -54,16 +58,20 @@ public:
         sum, sub, mul
     };
 
-    static Matrix ElementOperation(const Matrix &, const Matrix &, operation);
-
     static Matrix ElementSum(const Matrix &, const Matrix &);
 
     static Matrix ElementMul(const Matrix &, const Matrix &);
 
     static Matrix ElementSub(const Matrix &, const Matrix &);
 
+    static Matrix Dot(const Matrix &, const Matrix &);
+
 
 private:
+    static Matrix ElementOperation(const Matrix &, const Matrix &, operation);
+
+    void ComputeElementInDot(const Matrix &, const Matrix &, unsigned processed_row, unsigned processed_col);
+
     double **matrix_arr;
     unsigned matrix_rows, matrix_columns;
 };

@@ -51,3 +51,11 @@ TEST(Matrix, ElementOperations) {
     ASSERT_THROW(Matrix::ElementSub(Matrix::ValueInited(6, 2, 3),
                                     Matrix::ValueInited(1, 5, 3)), std::out_of_range);
 }
+
+TEST(Matrix, Dot) {
+    EXPECT_EQ(Matrix::ValueInited(0, 5, 9),
+              Matrix::Dot(Matrix::ValueInited(0, 5, 3),
+                          Matrix::ValueInited(10, 3, 9)));
+    ASSERT_THROW(Matrix::Dot(Matrix::ValueInited(0, 5, 6),
+                             Matrix::ValueInited(10, 3, 9)), std::out_of_range);
+}

@@ -108,3 +108,10 @@ bool Matrix::IsEqualShape(const Matrix &other) const {
     }
     return true;
 }
+
+bool Matrix::IsInBounds(unsigned row, unsigned col) const {
+    if (row >= matrix_rows || col >= matrix_columns) {
+        return false;
+    }
+    return true;
+}

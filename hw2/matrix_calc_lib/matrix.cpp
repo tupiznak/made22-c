@@ -9,13 +9,6 @@ Matrix::~Matrix() {
 
 Matrix::Matrix(const Matrix &other) : Matrix(other.matrix_arr, other.matrix_rows, other.matrix_columns) {}
 
-Matrix &Matrix::operator=(const Matrix &other) {
-    if (this != &other) {
-        Matrix(other).swap(*this);
-    }
-    return *this;
-}
-
 void Matrix::swap(Matrix &other) {
     std::swap(matrix_rows, other.matrix_rows);
     std::swap(matrix_columns, other.matrix_columns);
@@ -50,26 +43,6 @@ Matrix Matrix::ValueInited(double value, unsigned int rows, unsigned int columns
     mx.matrix_columns = columns;
 
     return mx;
-}
-
-double Matrix::operator()(unsigned int row, unsigned int col) const {
-    if (row >= matrix_rows || col >= matrix_columns)
-        throw std::out_of_range("out of bounds");
-    return matrix_arr[row][col];
-}
-
-bool Matrix::operator==(const Matrix &other) const {
-    if (matrix_rows != other.matrix_rows || matrix_columns != other.matrix_columns) {
-        return false;
-    }
-    for (int i = 0; i < matrix_rows; ++i) {
-        for (int j = 0; j < matrix_columns; ++j) {
-            if (matrix_arr[i][j] != other.matrix_arr[i][j]) {
-                return false;
-            }
-        }
-    }
-    return true;
 }
 
 template<unsigned int ROWS, unsigned int COLUMNS>

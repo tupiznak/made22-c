@@ -17,8 +17,11 @@ public:
     ~Matrix();
 
     Matrix &operator=(const Matrix &);
+    Matrix &operator+(double );
+    Matrix &operator+=(double );
 
     bool operator==(const Matrix &) const;
+    bool operator!=(const Matrix &) const;
 
     double operator()(unsigned row, unsigned col) const;
 

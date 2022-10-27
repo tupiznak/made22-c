@@ -115,3 +115,13 @@ bool Matrix::IsInBounds(unsigned row, unsigned col) const {
     }
     return true;
 }
+
+Matrix Matrix::Transpose() {
+    auto matrix = Matrix::EmptyInited(matrix_columns, matrix_rows);
+    for (unsigned i = 0; i < matrix_rows; ++i) {
+        for (unsigned j = 0; j < matrix_columns; ++j) {
+            matrix.matrix_arr[j][i] = matrix_arr[i][j];
+        }
+    }
+    return matrix;
+}

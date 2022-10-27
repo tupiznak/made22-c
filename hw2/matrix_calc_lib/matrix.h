@@ -66,6 +66,8 @@ public:
 
     static Matrix Dot(const Matrix &, const Matrix &);
 
+    Matrix Transpose();
+
 
 private:
     static Matrix ElementOperation(const Matrix &, const Matrix &, operation);

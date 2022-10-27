@@ -59,3 +59,13 @@ TEST(Matrix, Dot) {
     ASSERT_THROW(Matrix::Dot(Matrix::ValueInited(0, 5, 6),
                              Matrix::ValueInited(10, 3, 9)), std::out_of_range);
 }
+
+TEST(Matrix, Transpose) {
+    auto matrix0 = Matrix::ValueInited(8, 5, 3);
+    matrix0(1, 1) = 2;
+    matrix0(1, 2) = 20;
+    auto matrix1 = Matrix::ValueInited(8, 3, 5);
+    matrix1(1, 1) = 2;
+    matrix1(2, 1) = 20;
+    EXPECT_EQ(matrix0.Transpose(), matrix1);
+}

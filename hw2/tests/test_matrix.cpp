@@ -71,34 +71,6 @@ TEST(Matrix, Transpose) {
 }
 
 
-TEST(Matrix, SortedByRows) {
-
-    auto matrix = Matrix::EmptyInited(3, 3);
-    matrix(0, 0) = 0;
-    matrix(0, 1) = 2;
-    matrix(0, 2) = 3;
-    matrix(1, 0) = 0;
-    matrix(1, 1) = 0;
-    matrix(1, 2) = 6;
-    matrix(2, 0) = 7;
-    matrix(2, 1) = 8;
-    matrix(2, 2) = 8;
-
-    auto matrix_check = Matrix::EmptyInited(3, 3);
-    matrix_check(0, 0) = 7;
-    matrix_check(0, 1) = 8;
-    matrix_check(0, 2) = 8;
-    matrix_check(1, 0) = 0;
-    matrix_check(1, 1) = 2;
-    matrix_check(1, 2) = 3;
-    matrix_check(2, 0) = 0;
-    matrix_check(2, 1) = 0;
-    matrix_check(2, 2) = 6;
-
-    EXPECT_EQ(matrix_check, matrix);
-
-}
-
 TEST(Matrix, Determinant) {
     ASSERT_THROW(Matrix::ValueInited(0, 5, 6).Determinant(), std::range_error);
     EXPECT_EQ(0, Matrix::ValueInited(0, 5, 5).Determinant());
@@ -110,6 +82,14 @@ TEST(Matrix, Determinant) {
         matrix(1, 0) = 3;
         matrix(1, 1) = 4;
         EXPECT_DOUBLE_EQ(-2, matrix.Determinant());
+    }
+    {
+        auto matrix = Matrix::EmptyInited(2, 2);
+        matrix(0, 0) = 4;
+        matrix(0, 1) = 2.4;
+        matrix(1, 0) = 0;
+        matrix(1, 1) = 3;
+        EXPECT_DOUBLE_EQ(12, matrix.Determinant());
     }
     {
         auto matrix = Matrix::EmptyInited(2, 2);
@@ -133,7 +113,7 @@ TEST(Matrix, Determinant) {
         matrix(0, 1) = 3;
         matrix(1, 0) = 82;
         matrix(1, 1) = 21.1;
-        EXPECT_DOUBLE_EQ(246, matrix.Determinant());
+        EXPECT_DOUBLE_EQ(-246, matrix.Determinant());
     }
 }
 
@@ -191,12 +171,12 @@ TEST(Matrix, Invertible) {
         matrix_check(2, 1) = 180. / 259;
         matrix_check(2, 2) = 10. / 259;
 
-        ASSERT_DOUBLE_EQ(-4662. / 5, matrix.Determinant());
+        ASSERT_FLOAT_EQ(-4662. / 5, matrix.Determinant());
         for (unsigned i = 0; i < 3; ++i) {
             for (unsigned j = 0; j < 3; ++j) {
-                EXPECT_DOUBLE_EQ(matrix_check(i, j), matrix.Invertible()(i, j));
+                EXPECT_FLOAT_EQ(matrix_check(i, j), matrix.Invertible()(i, j));
             }
         }
-        EXPECT_EQ(matrix_check, matrix.Adjugate());
+        EXPECT_EQ(matrix_check, matrix.Invertible());
     }
 }

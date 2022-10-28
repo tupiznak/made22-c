@@ -1,3 +1,4 @@
+#include <iostream>
 #include "matrix.h"
 
 Matrix::~Matrix() {
@@ -127,21 +128,10 @@ Matrix Matrix::Transpose() {
 }
 
 Matrix Matrix::SortedByRows(const Matrix &orig_matrix) {
-    auto matrix = EmptyInited(orig_matrix.matrix_rows, orig_matrix.matrix_columns);
-    unsigned rows_order[matrix.matrix_rows];
+    Matrix matrix = orig_matrix;
     for (unsigned i = 0; i < matrix.matrix_rows; ++i) {
         unsigned max_non_zero_columns[2] = {0, i};
-        for (unsigned j = 0; j < matrix.matrix_rows; ++j) {
-            bool next_el = false;
-            for (unsigned k = 0; k < i; ++k) {
-                if (j == rows_order[k]) {
-                    next_el = true;
-                    break;
-                }
-            }
-            if (next_el) {
-                continue;
-            }
+        for (unsigned j = i; j < matrix.matrix_rows; ++j) {
             unsigned k = 0;
             while (k < matrix.matrix_columns && (float) orig_matrix.matrix_arr[j][k] == 0) {
                 k += 1;
@@ -152,13 +142,12 @@ Matrix Matrix::SortedByRows(const Matrix &orig_matrix) {
                 max_non_zero_columns[1] = j;
             }
         }
-        rows_order[i] = max_non_zero_columns[1];
-    }
-
-    for (unsigned i = 0; i < matrix.matrix_rows; ++i) {
-        for (unsigned j = 0; j < matrix.matrix_columns; ++j) {
-            int sign = rows_order[i] == i ? 1 : -1;
-            matrix.matrix_arr[rows_order[i]][j] = sign * orig_matrix.matrix_arr[i][j];
+        if (max_non_zero_columns[1] != i){
+            for (unsigned j = 0; j < matrix.matrix_columns; ++j) {
+                auto tmp = matrix.matrix_arr[i][j];
+                matrix.matrix_arr[i][j] = -matrix.matrix_arr[max_non_zero_columns[1]][j];
+                matrix.matrix_arr[max_non_zero_columns[1]][j] = tmp;
+            }
         }
     }
     return matrix;
@@ -205,8 +194,7 @@ Matrix Matrix::Adjugate() {
                     imp_matrix.matrix_arr[k - offset_k][l - offset_l] = matrix_arr[k][l];
                 }
             }
-            auto t = imp_matrix.Determinant() * std::pow(-1, i + j);
-            adjugate_matrix.matrix_arr[i][j] = t;
+            adjugate_matrix.matrix_arr[i][j] = imp_matrix.Determinant() * std::pow(-1, i + j);
         }
     }
     return adjugate_matrix;

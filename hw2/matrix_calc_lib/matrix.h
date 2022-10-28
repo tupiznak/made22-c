@@ -69,7 +69,7 @@ public:
 
     Matrix Transpose();
 
-    double Determinant();
+    double Determinant() const;
 
     Matrix Adjugate();
 
@@ -80,6 +80,8 @@ private:
     static Matrix ElementOperation(const Matrix &, const Matrix &, operation);
 
     void ComputeElementInDot(const Matrix &, const Matrix &, unsigned processed_row, unsigned processed_col);
+
+    static Matrix SortedByRows(const Matrix &);
 
     double **matrix_arr;
     unsigned matrix_rows, matrix_columns;

@@ -126,24 +126,63 @@ Matrix Matrix::Transpose() {
     return matrix;
 }
 
-double Matrix::Determinant() {
+Matrix Matrix::SortedByRows(const Matrix &orig_matrix) {
+    auto matrix = EmptyInited(orig_matrix.matrix_rows, orig_matrix.matrix_columns);
+    unsigned rows_order[matrix.matrix_rows];
+    for (unsigned i = 0; i < matrix.matrix_rows; ++i) {
+        unsigned max_non_zero_columns[2] = {0, i};
+        for (unsigned j = 0; j < matrix.matrix_rows; ++j) {
+            bool next_el = false;
+            for (unsigned k = 0; k < i; ++k) {
+                if (j == rows_order[k]) {
+                    next_el = true;
+                    break;
+                }
+            }
+            if (next_el) {
+                continue;
+            }
+            unsigned k = 0;
+            while (k < matrix.matrix_columns && (float) orig_matrix.matrix_arr[j][k] == 0) {
+                k += 1;
+            }
+            k = matrix.matrix_columns - k;
+            if (k > max_non_zero_columns[0]) {
+                max_non_zero_columns[0] = k;
+                max_non_zero_columns[1] = j;
+            }
+        }
+        rows_order[i] = max_non_zero_columns[1];
+    }
+
+    for (unsigned i = 0; i < matrix.matrix_rows; ++i) {
+        for (unsigned j = 0; j < matrix.matrix_columns; ++j) {
+            int sign = rows_order[i] == i ? 1 : -1;
+            matrix.matrix_arr[rows_order[i]][j] = sign * orig_matrix.matrix_arr[i][j];
+        }
+    }
+    return matrix;
+}
+
+double Matrix::Determinant() const {
     if (matrix_rows != matrix_columns) {
         throw std::range_error("rows and columns must be equal");
     }
+    auto matrix = SortedByRows(*this);
     double determinant = 1;
     for (unsigned k = 0; k < matrix_rows - 1; ++k) {
         for (unsigned i = k + 1; i < matrix_rows; i++) {
-            if ((float) matrix_arr[k][k] == 0) {
+            if ((float) matrix.matrix_arr[k][k] == 0) {
                 continue;
             }
-            double base = -matrix_arr[i][k] / matrix_arr[k][k];
+            double base = -matrix.matrix_arr[i][k] / matrix.matrix_arr[k][k];
             for (unsigned j = 0; j < matrix_rows; j++) {
-                matrix_arr[i][j] += matrix_arr[k][j] * base;
+                matrix.matrix_arr[i][j] += matrix.matrix_arr[k][j] * base;
             }
         }
     }
     for (unsigned i = 0; i < matrix_rows; i++) {
-        determinant *= matrix_arr[i][i];
+        determinant *= matrix.matrix_arr[i][i];
     }
     return determinant;
 }

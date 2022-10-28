@@ -70,6 +70,35 @@ TEST(Matrix, Transpose) {
     EXPECT_EQ(matrix0.Transpose(), matrix1);
 }
 
+
+TEST(Matrix, SortedByRows) {
+
+    auto matrix = Matrix::EmptyInited(3, 3);
+    matrix(0, 0) = 0;
+    matrix(0, 1) = 2;
+    matrix(0, 2) = 3;
+    matrix(1, 0) = 0;
+    matrix(1, 1) = 0;
+    matrix(1, 2) = 6;
+    matrix(2, 0) = 7;
+    matrix(2, 1) = 8;
+    matrix(2, 2) = 8;
+
+    auto matrix_check = Matrix::EmptyInited(3, 3);
+    matrix_check(0, 0) = 7;
+    matrix_check(0, 1) = 8;
+    matrix_check(0, 2) = 8;
+    matrix_check(1, 0) = 0;
+    matrix_check(1, 1) = 2;
+    matrix_check(1, 2) = 3;
+    matrix_check(2, 0) = 0;
+    matrix_check(2, 1) = 0;
+    matrix_check(2, 2) = 6;
+
+    EXPECT_EQ(matrix_check, matrix);
+
+}
+
 TEST(Matrix, Determinant) {
     ASSERT_THROW(Matrix::ValueInited(0, 5, 6).Determinant(), std::range_error);
     EXPECT_EQ(0, Matrix::ValueInited(0, 5, 5).Determinant());
@@ -104,7 +133,7 @@ TEST(Matrix, Determinant) {
         matrix(0, 1) = 3;
         matrix(1, 0) = 82;
         matrix(1, 1) = 21.1;
-        EXPECT_DOUBLE_EQ(-246, matrix.Determinant());
+        EXPECT_DOUBLE_EQ(246, matrix.Determinant());
     }
 }
 

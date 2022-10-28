@@ -98,6 +98,14 @@ TEST(Matrix, Determinant) {
         matrix(1, 1) = 8;
         EXPECT_DOUBLE_EQ(-10, matrix.Determinant());
     }
+    {
+        auto matrix = Matrix::EmptyInited(2, 2);
+        matrix(0, 0) = 0;
+        matrix(0, 1) = 3;
+        matrix(1, 0) = 82;
+        matrix(1, 1) = 21.1;
+        EXPECT_DOUBLE_EQ(-246, matrix.Determinant());
+    }
 }
 
 TEST(Matrix, Adjugate) {
@@ -125,6 +133,39 @@ TEST(Matrix, Adjugate) {
         for (unsigned i = 0; i < 3; ++i) {
             for (unsigned j = 0; j < 3; ++j) {
                 EXPECT_DOUBLE_EQ(matrix_check(i, j), matrix.Adjugate()(i, j));
+            }
+        }
+        EXPECT_EQ(matrix_check, matrix.Adjugate());
+    }
+}
+
+TEST(Matrix, Invertible) {
+    auto matrix = Matrix::EmptyInited(3, 3);
+    matrix(0, 0) = 8;
+    matrix(0, 1) = 4;
+    matrix(0, 2) = 2.4;
+    matrix(1, 0) = 9;
+    matrix(1, 1) = 0;
+    matrix(1, 2) = 3;
+    matrix(2, 0) = 2;
+    matrix(2, 1) = 82;
+    matrix(2, 2) = 21.1;
+    {
+        auto matrix_check = Matrix::EmptyInited(3, 3);
+        matrix_check(0, 0) = 205. / 777;
+        matrix_check(0, 1) = -281. / 2331;
+        matrix_check(0, 2) = -10. / 777;
+        matrix_check(1, 0) = 613. / 3108;
+        matrix_check(1, 1) = -410. / 2331;
+        matrix_check(1, 2) = 2. / 777;
+        matrix_check(2, 0) = -205. / 259;
+        matrix_check(2, 1) = 180. / 259;
+        matrix_check(2, 2) = 10. / 259;
+
+        ASSERT_DOUBLE_EQ(-4662. / 5, matrix.Determinant());
+        for (unsigned i = 0; i < 3; ++i) {
+            for (unsigned j = 0; j < 3; ++j) {
+                EXPECT_DOUBLE_EQ(matrix_check(i, j), matrix.Invertible()(i, j));
             }
         }
         EXPECT_EQ(matrix_check, matrix.Adjugate());

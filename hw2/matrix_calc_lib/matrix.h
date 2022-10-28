@@ -68,9 +68,12 @@ public:
     static Matrix Dot(const Matrix &, const Matrix &);
 
     Matrix Transpose();
+
     double Determinant();
-    double Invertible();
+
     Matrix Adjugate();
+
+    Matrix Invertible();
 
 
 private:

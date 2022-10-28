@@ -74,10 +74,59 @@ TEST(Matrix, Determinant) {
     ASSERT_THROW(Matrix::ValueInited(0, 5, 6).Determinant(), std::range_error);
     EXPECT_EQ(0, Matrix::ValueInited(0, 5, 5).Determinant());
     EXPECT_EQ(0, Matrix::ValueInited(10, 5, 5).Determinant());
-    auto matrix = Matrix::EmptyInited(2,2);
+    {
+        auto matrix = Matrix::EmptyInited(2, 2);
+        matrix(0, 0) = 1;
+        matrix(0, 1) = 2;
+        matrix(1, 0) = 3;
+        matrix(1, 1) = 4;
+        EXPECT_DOUBLE_EQ(-2, matrix.Determinant());
+    }
+    {
+        auto matrix = Matrix::EmptyInited(2, 2);
+        matrix(0, 0) = 5;
+        matrix(0, 1) = 6;
+        matrix(1, 0) = 8;
+        matrix(1, 1) = 8;
+        EXPECT_DOUBLE_EQ(-8, matrix.Determinant());
+    }
+    {
+        auto matrix = Matrix::EmptyInited(2, 2);
+        matrix(0, 0) = 4;
+        matrix(0, 1) = 6;
+        matrix(1, 0) = 7;
+        matrix(1, 1) = 8;
+        EXPECT_DOUBLE_EQ(-10, matrix.Determinant());
+    }
+}
+
+TEST(Matrix, Adjugate) {
+    auto matrix = Matrix::EmptyInited(3, 3);
     matrix(0, 0) = 1;
     matrix(0, 1) = 2;
-    matrix(1, 0) = 3;
-    matrix(1, 1) = 4;
-    EXPECT_EQ(-2, matrix.Determinant());
+    matrix(0, 2) = 3;
+    matrix(1, 0) = 4;
+    matrix(1, 1) = 5;
+    matrix(1, 2) = 6;
+    matrix(2, 0) = 7;
+    matrix(2, 1) = 8;
+    matrix(2, 2) = 8;
+    {
+        auto matrix_check = Matrix::EmptyInited(3, 3);
+        matrix_check(0, 0) = -8;
+        matrix_check(0, 1) = 10;
+        matrix_check(0, 2) = -3;
+        matrix_check(1, 0) = 8;
+        matrix_check(1, 1) = -13;
+        matrix_check(1, 2) = 6;
+        matrix_check(2, 0) = -3;
+        matrix_check(2, 1) = 6;
+        matrix_check(2, 2) = -3;
+        for (unsigned i = 0; i < 3; ++i) {
+            for (unsigned j = 0; j < 3; ++j) {
+                EXPECT_DOUBLE_EQ(matrix_check(i, j), matrix.Adjugate()(i, j));
+            }
+        }
+        EXPECT_EQ(matrix_check, matrix.Adjugate());
+    }
 }

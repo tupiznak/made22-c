@@ -133,10 +133,10 @@ double Matrix::Determinant() {
     double determinant = 1;
     for (unsigned k = 0; k < matrix_rows - 1; ++k) {
         for (unsigned i = k + 1; i < matrix_rows; i++) {
-            if (matrix_arr[k][k] == 0){
+            if (matrix_arr[k][k] == 0) {
                 continue;
             }
-            auto base = -matrix_arr[i][k] / matrix_arr[k][k];
+            double base = -matrix_arr[i][k] / matrix_arr[k][k];
             for (unsigned j = 0; j < matrix_rows; j++) {
                 matrix_arr[i][j] += matrix_arr[k][j] * base;
             }
@@ -146,4 +146,39 @@ double Matrix::Determinant() {
         determinant *= matrix_arr[i][i];
     }
     return determinant;
+}
+
+double Matrix::Invertible() {
+    if (matrix_rows != matrix_columns) {
+        throw std::range_error("cols and rows must be equal");
+    }
+    auto determinant = Determinant();
+    if (determinant == 0) {
+        throw std::logic_error("determinant must be non zero");
+    }
+
+}
+
+Matrix Matrix::Adjugate() {
+    auto adjugate_matrix = EmptyInited(matrix_rows, matrix_columns);
+    for (unsigned i = 0; i < matrix_rows; ++i) {
+        for (unsigned j = 0; j < matrix_columns; ++j) {
+            auto imp_matrix = EmptyInited(matrix_rows - 1, matrix_columns - 1);
+            for (unsigned k = 0, offset_k = 0; k < matrix_rows; ++k) {
+                if (k == i) {
+                    offset_k = 1;
+                    continue;
+                }
+                for (unsigned l = 0, offset_l = 0; l < matrix_columns; ++l) {
+                    if (l == j) {
+                        offset_l = 1;
+                        continue;
+                    }
+                    imp_matrix.matrix_arr[k - offset_k][l - offset_l] = matrix_arr[k][l];
+                }
+            }
+            adjugate_matrix.matrix_arr[i][j] = imp_matrix.Determinant() * std::pow(-1, i + j);
+        }
+    }
+    return adjugate_matrix;
 }

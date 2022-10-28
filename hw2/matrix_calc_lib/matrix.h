@@ -2,6 +2,7 @@
 #define MATRIX_H
 
 #include <stdexcept>
+#include <complex>
 
 struct Matrix {
 public:
@@ -68,6 +69,8 @@ public:
 
     Matrix Transpose();
     double Determinant();
+    double Invertible();
+    Matrix Adjugate();
 
 
 private:

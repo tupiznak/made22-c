@@ -20,7 +20,7 @@ bool Matrix::operator==(const Matrix &other) const {
     }
     for (unsigned i = 0; i < matrix_rows; ++i) {
         for (unsigned j = 0; j < matrix_columns; ++j) {
-            if (matrix_arr[i][j] != other.matrix_arr[i][j]) {
+            if ((float) matrix_arr[i][j] != (float) other.matrix_arr[i][j]) {
                 return false;
             }
         }

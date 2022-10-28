@@ -69,3 +69,15 @@ TEST(Matrix, Transpose) {
     matrix1(2, 1) = 20;
     EXPECT_EQ(matrix0.Transpose(), matrix1);
 }
+
+TEST(Matrix, Determinant) {
+    ASSERT_THROW(Matrix::ValueInited(0, 5, 6).Determinant(), std::range_error);
+    EXPECT_EQ(0, Matrix::ValueInited(0, 5, 5).Determinant());
+    EXPECT_EQ(0, Matrix::ValueInited(10, 5, 5).Determinant());
+    auto matrix = Matrix::EmptyInited(2,2);
+    matrix(0, 0) = 1;
+    matrix(0, 1) = 2;
+    matrix(1, 0) = 3;
+    matrix(1, 1) = 4;
+    EXPECT_EQ(-2, matrix.Determinant());
+}

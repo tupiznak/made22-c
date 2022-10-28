@@ -67,6 +67,7 @@ public:
     static Matrix Dot(const Matrix &, const Matrix &);
 
     Matrix Transpose();
+    double Determinant();
 
 
 private:

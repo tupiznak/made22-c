@@ -125,3 +125,25 @@ Matrix Matrix::Transpose() {
     }
     return matrix;
 }
+
+double Matrix::Determinant() {
+    if (matrix_rows != matrix_columns) {
+        throw std::range_error("rows and columns must be equal");
+    }
+    double determinant = 1;
+    for (unsigned k = 0; k < matrix_rows - 1; ++k) {
+        for (unsigned i = k + 1; i < matrix_rows; i++) {
+            if (matrix_arr[k][k] == 0){
+                continue;
+            }
+            auto base = -matrix_arr[i][k] / matrix_arr[k][k];
+            for (unsigned j = 0; j < matrix_rows; j++) {
+                matrix_arr[i][j] += matrix_arr[k][j] * base;
+            }
+        }
+    }
+    for (unsigned i = 0; i < matrix_rows; i++) {
+        determinant *= matrix_arr[i][i];
+    }
+    return determinant;
+}

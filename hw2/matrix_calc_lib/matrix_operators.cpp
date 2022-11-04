@@ -1,26 +1,26 @@
 #include "matrix.h"
 
-Matrix &Matrix::operator=(const Matrix &other) {
+auto Matrix::operator=(const Matrix &other) -> Matrix & {
     if (this != &other) {
         Matrix(other).swap(*this);
     }
     return *this;
 }
 
-double &Matrix::operator()(unsigned row, unsigned col) const {
+auto Matrix::operator()(unsigned row, unsigned col) const -> double & {
     if (!IsInBounds(row, col)) {
         throw std::out_of_range("out of bounds");
     }
     return matrix_arr[row][col];
 }
 
-bool Matrix::operator==(const Matrix &other) const {
+auto Matrix::operator==(const Matrix &other) const -> bool {
     if (!IsEqualShape(other)) {
         return false;
     }
     for (unsigned i = 0; i < matrix_rows; ++i) {
         for (unsigned j = 0; j < matrix_columns; ++j) {
-            if ((float) matrix_arr[i][j] != (float) other.matrix_arr[i][j]) {
+            if (static_cast<float>(matrix_arr[i][j]) != static_cast<float>(other.matrix_arr[i][j])) {
                 return false;
             }
         }
@@ -28,45 +28,45 @@ bool Matrix::operator==(const Matrix &other) const {
     return true;
 }
 
-Matrix Matrix::operator+(double val) {
+auto Matrix::operator+(double val) -> Matrix {
     auto new_matrix = Matrix(*this);
     Matrix::add(new_matrix, val);
     return {new_matrix};
 }
 
-Matrix Matrix::operator-(double val) {
+auto Matrix::operator-(double val) -> Matrix {
     auto new_matrix = Matrix(*this);
     Matrix::add(new_matrix, -val);
     return {new_matrix};
 }
 
-Matrix &Matrix::operator+=(double val) {
+auto Matrix::operator+=(double val) -> Matrix & {
     Matrix::add(*this, val);
     return *this;
 }
 
-Matrix &Matrix::operator-=(double val) {
+auto Matrix::operator-=(double val) -> Matrix & {
     Matrix::add(*this, -val);
     return *this;
 }
 
-Matrix &Matrix::operator*=(double val) {
+auto Matrix::operator*=(double val) -> Matrix & {
     Matrix::multiply(*this, val);
     return *this;
 }
 
-Matrix Matrix::operator*(double val) {
+auto Matrix::operator*(double val) -> Matrix {
     auto new_matrix = Matrix(*this);
     Matrix::multiply(new_matrix, val);
     return {new_matrix};
 }
 
 
-bool Matrix::operator!=(const Matrix &other) const {
+auto Matrix::operator!=(const Matrix &other) const -> bool {
     return !(*this == other);
 }
 
-Matrix Matrix::operator()(const unsigned int (&rows)[2], const unsigned int (&cols)[2]) const {
+auto Matrix::operator()(const unsigned int (&rows)[2], const unsigned int (&cols)[2]) const -> Matrix {
     if (!(IsInBounds(rows[0], cols[0]) && IsInBounds(rows[1] - 1, cols[1] - 1))) {
         throw std::out_of_range("out of bounds in slice");
     }

@@ -1,6 +1,6 @@
 #include "matrix.h"
 
-bool Matrix::IsCanDot(const Matrix &b) const {
+auto Matrix::IsCanDot(const Matrix &b) const -> bool {
     return matrix_columns == b.matrix_rows;
 }
 
@@ -16,7 +16,7 @@ void Matrix::ComputeElementInDot(const Matrix &a, const Matrix &b, unsigned proc
     matrix_arr[processed_row][processed_col] = sum;
 }
 
-Matrix Matrix::Dot(const Matrix &a, const Matrix &b) {
+auto Matrix::Dot(const Matrix &a, const Matrix &b) -> Matrix {
     if (!a.IsCanDot(b)) {
         throw std::out_of_range("matrix A columns not equal matrix B rows");
     }

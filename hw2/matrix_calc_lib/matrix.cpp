@@ -15,10 +15,8 @@ void Matrix::swap(Matrix &other) {
     std::swap(matrix_arr, other.matrix_arr);
 }
 
-Matrix::Matrix(double **arr, unsigned rows, unsigned columns) {
-    matrix_rows = rows;
-    matrix_columns = columns;
-    matrix_arr = new double *[rows];
+Matrix::Matrix(double **arr, unsigned rows, unsigned columns)
+        : matrix_rows(rows), matrix_columns(columns), matrix_arr(new double *[rows]) {
     for (unsigned i = 0; i < rows; ++i) {
         matrix_arr[i] = new double[columns];
         for (unsigned j = 0; j < columns; ++j) {
@@ -27,10 +25,10 @@ Matrix::Matrix(double **arr, unsigned rows, unsigned columns) {
     }
 }
 
-Matrix Matrix::ValueInited(double value, unsigned rows, unsigned columns) {
+auto Matrix::ValueInited(double value, unsigned rows, unsigned columns) -> Matrix {
     auto mx = Matrix{};
 
-    auto matrix_arr = new double *[rows];
+    auto *matrix_arr = new double *[rows];
     for (unsigned i = 0; i < rows; ++i) {
         matrix_arr[i] = new double[columns];
         for (unsigned j = 0; j < columns; ++j) {
@@ -45,10 +43,10 @@ Matrix Matrix::ValueInited(double value, unsigned rows, unsigned columns) {
     return mx;
 }
 
-Matrix Matrix::EmptyInited(unsigned int rows, unsigned int columns) {
+auto Matrix::EmptyInited(unsigned int rows, unsigned int columns) -> Matrix {
     auto mx = Matrix{};
 
-    auto matrix_arr = new double *[rows];
+    auto *matrix_arr = new double *[rows];
     for (unsigned i = 0; i < rows; ++i) {
         matrix_arr[i] = new double[columns];
     }
@@ -77,7 +75,7 @@ void Matrix::multiply(const Matrix &matrix, double value) {
     }
 }
 
-Matrix Matrix::diagonal() {
+auto Matrix::diagonal() -> Matrix {
     auto diag_len = std::min(matrix_rows, matrix_columns);
     auto vector = Matrix::EmptyInited(1, diag_len);
     for (unsigned i = 0; i < diag_len; ++i) {
@@ -86,7 +84,7 @@ Matrix Matrix::diagonal() {
     return vector;
 }
 
-Matrix Matrix::row(unsigned row) {
+auto Matrix::row(unsigned row) -> Matrix {
     auto vector = Matrix::EmptyInited(1, matrix_columns);
     for (unsigned i = 0; i < matrix_columns; ++i) {
         vector.matrix_arr[0][i] = matrix_arr[row][i];
@@ -94,7 +92,7 @@ Matrix Matrix::row(unsigned row) {
     return vector;
 }
 
-Matrix Matrix::column(unsigned int column) {
+auto Matrix::column(unsigned int column) -> Matrix {
     auto vector = Matrix::EmptyInited(matrix_rows, 1);
     for (unsigned i = 0; i < matrix_rows; ++i) {
         vector.matrix_arr[i][0] = matrix_arr[i][column];
@@ -102,21 +100,15 @@ Matrix Matrix::column(unsigned int column) {
     return vector;
 }
 
-bool Matrix::IsEqualShape(const Matrix &other) const {
-    if (matrix_rows != other.matrix_rows || matrix_columns != other.matrix_columns) {
-        return false;
-    }
-    return true;
+auto Matrix::IsEqualShape(const Matrix &other) const -> bool {
+    return !(matrix_rows != other.matrix_rows || matrix_columns != other.matrix_columns);
 }
 
-bool Matrix::IsInBounds(unsigned row, unsigned col) const {
-    if (row >= matrix_rows || col >= matrix_columns) {
-        return false;
-    }
-    return true;
+auto Matrix::IsInBounds(unsigned row, unsigned col) const -> bool {
+    return !(row >= matrix_rows || col >= matrix_columns);
 }
 
-Matrix Matrix::Transpose() {
+auto Matrix::Transpose() -> Matrix {
     auto matrix = Matrix::EmptyInited(matrix_columns, matrix_rows);
     for (unsigned i = 0; i < matrix_rows; ++i) {
         for (unsigned j = 0; j < matrix_columns; ++j) {
@@ -127,7 +119,7 @@ Matrix Matrix::Transpose() {
 }
 
 
-Matrix Matrix::VerticalStack(const Matrix &a, const Matrix &b) {
+auto Matrix::VerticalStack(const Matrix &a, const Matrix &b) -> Matrix {
     if (a.matrix_columns != b.matrix_columns) {
         throw std::range_error("vertical stacked elements must have equal columns length");
     }
@@ -145,7 +137,7 @@ Matrix Matrix::VerticalStack(const Matrix &a, const Matrix &b) {
     return matrix;
 }
 
-Matrix Matrix::HorizontalStack(const Matrix &a, const Matrix &b) {
+auto Matrix::HorizontalStack(const Matrix &a, const Matrix &b) -> Matrix {
     if (a.matrix_rows != b.matrix_rows) {
         throw std::range_error("vertical stacked elements must have equal rows length");
     }

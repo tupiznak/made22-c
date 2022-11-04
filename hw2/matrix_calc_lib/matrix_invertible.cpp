@@ -1,12 +1,12 @@
 #include "matrix.h"
 
-Matrix Matrix::SortedByRows(const Matrix &orig_matrix) {
+auto Matrix::SortedByRows(const Matrix &orig_matrix) -> Matrix {
     Matrix matrix = orig_matrix;
     for (unsigned i = 0; i < matrix.matrix_rows; ++i) {
         unsigned max_non_zero_columns[2] = {0, i};
         for (unsigned j = i; j < matrix.matrix_rows; ++j) {
             unsigned k = 0;
-            while (k < matrix.matrix_columns && (float) orig_matrix.matrix_arr[j][k] == 0) {
+            while (k < matrix.matrix_columns && static_cast<float>(orig_matrix.matrix_arr[j][k]) == 0) {
                 k += 1;
             }
             k = matrix.matrix_columns - k;
@@ -26,7 +26,7 @@ Matrix Matrix::SortedByRows(const Matrix &orig_matrix) {
     return matrix;
 }
 
-double Matrix::Determinant() const {
+auto Matrix::Determinant() const -> double {
     if (matrix_rows != matrix_columns) {
         throw std::range_error("rows and columns must be equal");
     }
@@ -34,7 +34,7 @@ double Matrix::Determinant() const {
     double determinant = 1;
     for (unsigned k = 0; k < matrix_rows - 1; ++k) {
         for (unsigned i = k + 1; i < matrix_rows; i++) {
-            if ((float) matrix.matrix_arr[k][k] == 0) {
+            if (static_cast<float>(matrix.matrix_arr[k][k]) == 0) {
                 continue;
             }
             double base = -matrix.matrix_arr[i][k] / matrix.matrix_arr[k][k];
@@ -49,7 +49,7 @@ double Matrix::Determinant() const {
     return determinant;
 }
 
-Matrix Matrix::Adjugate() {
+auto Matrix::Adjugate() -> Matrix {
     auto adjugate_matrix = EmptyInited(matrix_rows, matrix_columns);
     for (unsigned i = 0; i < matrix_rows; ++i) {
         for (unsigned j = 0; j < matrix_columns; ++j) {
@@ -73,7 +73,7 @@ Matrix Matrix::Adjugate() {
     return adjugate_matrix;
 }
 
-Matrix Matrix::Invertible() {
+auto Matrix::Invertible() -> Matrix {
     if (matrix_rows != matrix_columns) {
         throw std::range_error("cols and rows must be equal");
     }

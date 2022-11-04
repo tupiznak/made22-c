@@ -1,6 +1,6 @@
 #include "matrix.h"
 
-Matrix Matrix::ElementOperation(const Matrix &a, const Matrix &b, Matrix::operation op) {
+auto Matrix::ElementOperation(const Matrix &a, const Matrix &b, Matrix::operation op) -> Matrix {
     if (!a.IsEqualShape(b)){
         throw std::out_of_range("matrix shapes not equal");
     }
@@ -23,14 +23,14 @@ Matrix Matrix::ElementOperation(const Matrix &a, const Matrix &b, Matrix::operat
     return matrix;
 }
 
-Matrix Matrix::ElementSum(const Matrix &a, const Matrix &b) {
+auto Matrix::ElementSum(const Matrix &a, const Matrix &b) -> Matrix {
     return Matrix::ElementOperation(a, b, sum);
 }
 
-Matrix Matrix::ElementMul(const Matrix &a, const Matrix &b) {
+auto Matrix::ElementMul(const Matrix &a, const Matrix &b) -> Matrix {
     return Matrix::ElementOperation(a, b, mul);
 }
 
-Matrix Matrix::ElementSub(const Matrix &a, const Matrix &b) {
+auto Matrix::ElementSub(const Matrix &a, const Matrix &b) -> Matrix {
     return Matrix::ElementOperation(a, b, sub);
 }

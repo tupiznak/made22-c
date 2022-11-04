@@ -34,10 +34,33 @@ Matrix Matrix::operator+(double val) {
     return {new_matrix};
 }
 
+Matrix Matrix::operator-(double val) {
+    auto new_matrix = Matrix(*this);
+    Matrix::add(new_matrix, -val);
+    return {new_matrix};
+}
+
 Matrix &Matrix::operator+=(double val) {
     Matrix::add(*this, val);
     return *this;
 }
+
+Matrix &Matrix::operator-=(double val) {
+    Matrix::add(*this, -val);
+    return *this;
+}
+
+Matrix &Matrix::operator*=(double val) {
+    Matrix::multiply(*this, val);
+    return *this;
+}
+
+Matrix Matrix::operator*(double val) {
+    auto new_matrix = Matrix(*this);
+    Matrix::multiply(new_matrix, val);
+    return {new_matrix};
+}
+
 
 bool Matrix::operator!=(const Matrix &other) const {
     return !(*this == other);

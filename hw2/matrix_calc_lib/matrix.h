@@ -1,5 +1,5 @@
-#ifndef MATRIX_H
-#define MATRIX_H
+#ifndef MATRIX_CALC_MATRIX_H
+#define MATRIX_CALC_MATRIX_H
 
 #include <stdexcept>
 #include <complex>
@@ -9,9 +9,6 @@ public:
     // constructors
     Matrix() = default;
 
-    template<unsigned ROWS, unsigned COLUMNS>
-    explicit Matrix(double **arr);
-
     Matrix(double **arr, unsigned rows, unsigned columns);
 
     Matrix(const Matrix &);
@@ -19,9 +16,6 @@ public:
     ~Matrix();
 
     void swap(Matrix &);
-
-    template<unsigned ROWS, unsigned COLUMNS>
-    static Matrix ValueInited(double val);
 
     static Matrix ValueInited(double val, unsigned rows, unsigned columns);
 
@@ -32,7 +26,15 @@ public:
 
     Matrix operator+(double);
 
+    Matrix operator-(double);
+
+    Matrix operator*(double);
+
     Matrix &operator+=(double);
+
+    Matrix &operator-=(double);
+
+    Matrix &operator*=(double);
 
     bool operator==(const Matrix &) const;
 
@@ -48,6 +50,8 @@ public:
     bool IsInBounds(unsigned row, unsigned col) const;
 
     static void add(const Matrix &, double value);
+
+    static void multiply(const Matrix &, double value);
 
     Matrix diagonal();
 
@@ -88,4 +92,4 @@ private:
 };
 
 
-#endif //MATRIX_H
+#endif //MATRIX_CALC_MATRIX_H

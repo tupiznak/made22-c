@@ -61,18 +61,18 @@ Matrix Matrix::EmptyInited(unsigned int rows, unsigned int columns) {
 }
 
 
-template<unsigned ROWS, unsigned COLUMNS>
-Matrix::Matrix(double **arr) : Matrix(arr, ROWS, COLUMNS) {}
-
-template<unsigned ROWS, unsigned COLUMNS>
-Matrix Matrix::ValueInited(double val) {
-    return Matrix::ValueInited(val, ROWS, COLUMNS);
-}
-
 void Matrix::add(const Matrix &matrix, double value) {
     for (unsigned i = 0; i < matrix.matrix_rows; ++i) {
         for (unsigned j = 0; j < matrix.matrix_columns; ++j) {
             matrix.matrix_arr[i][j] += value;
+        }
+    }
+}
+
+void Matrix::multiply(const Matrix &matrix, double value) {
+    for (unsigned i = 0; i < matrix.matrix_rows; ++i) {
+        for (unsigned j = 0; j < matrix.matrix_columns; ++j) {
+            matrix.matrix_arr[i][j] *= value;
         }
     }
 }
@@ -125,3 +125,12 @@ Matrix Matrix::Transpose() {
     }
     return matrix;
 }
+
+
+//
+//Matrix::Matrix(double *arr, unsigned len) {
+//    auto under_arr = new double*;
+//    *under_arr = arr;
+//    auto mx = Matrix(under_arr, len, 1);
+//    delete under_arr;
+//}

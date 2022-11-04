@@ -32,7 +32,7 @@ jobs:
       - name: Coverage
         working-directory: ${{github.workspace}}/hw2/build
         run: |
-          lcov -t "tests/CMakeFiles/test_matrix_dot" -o coverage.info -c -d matrix_dot_lib/ \
+          lcov -t "tests/CMakeFiles/test_matrix_calc" -o coverage.info -c -d matrix_calc_lib/ \
           && genhtml -o report coverage.info
 
       - name: Linters
@@ -42,7 +42,7 @@ jobs:
       - name: Valgrind
         working-directory: ${{github.workspace}}/hw2/build
         run: |
-          valgrind --tool=memcheck --leak-check=yes -s --log-fd=1 ./tests/test_matrix_dot > /tmp/valgrind_result \
+          valgrind --tool=memcheck --leak-check=yes -s --log-fd=1 ./tests/test_matrix_calc > /tmp/valgrind_result \
           && cat /tmp/valgrind_result \
           && ! grep "LEAK SUMMARY" /tmp/valgrind_result \
           && grep "ERROR SUMMARY: 0 errors" /tmp/valgrind_result

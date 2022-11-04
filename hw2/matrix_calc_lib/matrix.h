@@ -46,6 +46,8 @@ public:
 
     double &operator()(unsigned row, unsigned col) const;
 
+    Matrix operator()(const unsigned (&rows)[2], const unsigned (&cols)[2]) const;
+
     // functions
     bool IsEqualShape(const Matrix &) const;
 

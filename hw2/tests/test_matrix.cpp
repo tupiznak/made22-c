@@ -199,3 +199,29 @@ TEST(Matrix, Stack) {
     }
 }
 
+
+TEST(Matrix, Slice) {
+    auto matrix = Matrix::ValueInited(8, 5, 3);
+    matrix(0, 0) = 1;
+    matrix(4, 2) = 2;
+    matrix(2, 2) = 3;
+    // 1 8 8
+    // 8 8 8
+    // 8 8 3
+    // 8 8 8
+    // 8 8 2
+    {
+        auto slice = matrix({0, 2}, {1, 2});
+        EXPECT_EQ(8, slice(0, 0));
+        EXPECT_THROW(slice(2, 1), std::out_of_range);
+    }
+    {
+        auto slice = matrix({0, 3}, {1, 3});
+        EXPECT_EQ(8, slice(0, 0));
+        EXPECT_EQ(3, slice(2, 1));
+    }
+    {
+        EXPECT_THROW(matrix({0, 2}, {1, 4}), std::out_of_range);
+    }
+}
+

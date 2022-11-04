@@ -66,3 +66,15 @@ bool Matrix::operator!=(const Matrix &other) const {
     return !(*this == other);
 }
 
+Matrix Matrix::operator()(const unsigned int (&rows)[2], const unsigned int (&cols)[2]) const {
+    if (!(IsInBounds(rows[0], cols[0]) && IsInBounds(rows[1] - 1, cols[1] - 1))) {
+        throw std::out_of_range("out of bounds in slice");
+    }
+    auto matrix = Matrix::EmptyInited(rows[1] - rows[0], cols[1] - cols[0]);
+    for (unsigned i = rows[0]; i < rows[1]; ++i) {
+        for (unsigned j = cols[0]; j < cols[1]; ++j) {
+            matrix.matrix_arr[i - rows[0]][j - cols[0]] = matrix_arr[i][j];
+        }
+    }
+    return matrix;
+}

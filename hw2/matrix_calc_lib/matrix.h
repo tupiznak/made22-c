@@ -11,6 +11,20 @@ public:
 
     Matrix(double **arr, unsigned rows, unsigned columns);
 
+    template<unsigned ROWS, unsigned COLS>
+    static Matrix MatrixInit(const double (&arr)[ROWS][COLS]) {
+        auto matrix = Matrix::EmptyInited(ROWS, COLS);
+        for (unsigned i = 0; i < ROWS; ++i) {
+            for (unsigned j = 0; j < COLS; ++j) {
+                matrix.matrix_arr[i][j] = arr[i][j];
+            }
+        }
+        return matrix;
+    }
+
+    template<unsigned ROWS>
+    static double Test(const double (&)[ROWS]) { return 0; }
+
     Matrix(const Matrix &);
 
     ~Matrix();
@@ -96,6 +110,5 @@ private:
     double **matrix_arr;
     unsigned matrix_rows, matrix_columns;
 };
-
 
 #endif //MATRIX_CALC_MATRIX_H

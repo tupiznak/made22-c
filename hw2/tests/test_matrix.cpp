@@ -225,3 +225,20 @@ TEST(Matrix, Slice) {
     }
 }
 
+
+TEST(Matrix, Template) {
+    Matrix::MatrixInit<2, 3>(
+            {
+                    {1, 2, 3},
+                    {1, 2, 3}
+            });
+    Matrix::MatrixInit<5, 3>(
+            {
+                    {1, 2, 3},
+                    {1, 2, 3},
+                    {1, 2, 3},
+                    {1, 2, 3},
+                    {1, 2, 3}
+            });
+}
+

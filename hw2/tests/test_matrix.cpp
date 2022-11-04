@@ -180,3 +180,22 @@ TEST(Matrix, Invertible) {
         EXPECT_EQ(matrix_check, matrix.Invertible());
     }
 }
+
+TEST(Matrix, Stack) {
+    auto matrix0 = Matrix::ValueInited(8, 5, 3);
+    auto matrix1 = Matrix::ValueInited(3, 3, 5);
+    EXPECT_THROW(Matrix::VerticalStack(matrix0, matrix1), std::range_error);
+    EXPECT_THROW(Matrix::HorizontalStack(matrix0, matrix1), std::range_error);
+    {
+        auto m1 = Matrix::VerticalStack(matrix0.Transpose(), matrix1);
+        EXPECT_EQ(8, m1(1, 1));
+        EXPECT_EQ(3, m1(5, 1));
+    }
+    {
+        auto m1 = Matrix::HorizontalStack(matrix0.Transpose(), matrix1);
+        EXPECT_EQ(8, m1(1, 1));
+        EXPECT_EQ(3, m1(1, 9));
+        EXPECT_THROW(m1(1, 10), std::out_of_range);
+    }
+}
+

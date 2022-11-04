@@ -127,10 +127,39 @@ Matrix Matrix::Transpose() {
 }
 
 
-//
-//Matrix::Matrix(double *arr, unsigned len) {
-//    auto under_arr = new double*;
-//    *under_arr = arr;
-//    auto mx = Matrix(under_arr, len, 1);
-//    delete under_arr;
-//}
+Matrix Matrix::VerticalStack(const Matrix &a, const Matrix &b) {
+    if (a.matrix_columns != b.matrix_columns) {
+        throw std::range_error("vertical stacked elements must have equal columns length");
+    }
+    auto matrix = Matrix::EmptyInited(a.matrix_rows + b.matrix_rows, a.matrix_columns);
+    for (unsigned i = 0; i < a.matrix_rows; ++i) {
+        for (unsigned j = 0; j < a.matrix_columns; ++j) {
+            matrix.matrix_arr[i][j] = a.matrix_arr[i][j];
+        }
+    }
+    for (unsigned i = 0; i < b.matrix_rows; ++i) {
+        for (unsigned j = 0; j < a.matrix_columns; ++j) {
+            matrix.matrix_arr[i + a.matrix_rows][j] = b.matrix_arr[i][j];
+        }
+    }
+    return matrix;
+}
+
+Matrix Matrix::HorizontalStack(const Matrix &a, const Matrix &b) {
+    if (a.matrix_rows != b.matrix_rows) {
+        throw std::range_error("vertical stacked elements must have equal rows length");
+    }
+    auto matrix = Matrix::EmptyInited(a.matrix_rows, a.matrix_columns + b.matrix_columns);
+
+    for (unsigned i = 0; i < a.matrix_rows; ++i) {
+        for (unsigned j = 0; j < a.matrix_columns; ++j) {
+            matrix.matrix_arr[i][j] = a.matrix_arr[i][j];
+        }
+    }
+    for (unsigned i = 0; i < b.matrix_rows; ++i) {
+        for (unsigned j = 0; j < a.matrix_columns; ++j) {
+            matrix.matrix_arr[i][j + a.matrix_columns] = b.matrix_arr[i][j];
+        }
+    }
+    return matrix;
+}

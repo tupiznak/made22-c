@@ -21,3 +21,13 @@ double &VectorCol::operator()(unsigned int row) const {
     return Matrix::operator()(row, 0);
 }
 
+VectorCol::VectorCol(const Matrix &matrix) : Matrix() {
+    try {
+        matrix(0, 1);
+    } catch (const std::out_of_range &e) {
+        *this = matrix;
+        return;
+    }
+    throw std::logic_error("can not convert matrix to column with more than one columns");
+}
+

@@ -22,3 +22,11 @@ TEST(Vector, ConstructorDestructorCompareVector) {
     EXPECT_THROW(Matrix::Dot(vec_col, vec_col), std::logic_error);
     delete[] arr;
 }
+
+TEST(Vector, MatrixFromVector) {
+    ASSERT_THROW(VectorCol vec1{Matrix::ValueInited(3, 2, 2)}, std::logic_error);
+    VectorCol vec1{Matrix::ValueInited(2, 10, 1)};
+    VectorCol vec2{Matrix::ValueInited(3, 10, 1)};
+    auto mx = Matrix::HorizontalStack(vec1, vec2);
+    ASSERT_EQ(3, mx(0, 1));
+}

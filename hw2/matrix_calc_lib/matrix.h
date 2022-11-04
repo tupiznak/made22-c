@@ -21,6 +21,10 @@ public:
 
     static Matrix EmptyInited(unsigned rows, unsigned columns);
 
+    static Matrix VerticalStack(const Matrix &, const Matrix &);
+
+    static Matrix HorizontalStack(const Matrix &, const Matrix &);
+
     // operators
     Matrix &operator=(const Matrix &);
 

@@ -7,7 +7,7 @@
 struct Matrix {
 public:
     // constructors
-    Matrix() = default;
+    Matrix() : matrix_arr{}, matrix_rows{0}, matrix_columns{0} {};
 
     Matrix(double **arr, unsigned rows, unsigned columns);
 
@@ -31,7 +31,7 @@ public:
 
     void swap(Matrix &);
 
-    static Matrix ValueInited(double val, unsigned rows, unsigned columns);
+    static Matrix ValueInited(double value, unsigned rows, unsigned columns);
 
     static Matrix EmptyInited(unsigned rows, unsigned columns);
 

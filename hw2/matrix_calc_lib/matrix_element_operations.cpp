@@ -1,7 +1,7 @@
 #include "matrix.h"
 
 auto Matrix::ElementOperation(const Matrix &a, const Matrix &b, Matrix::operation op) -> Matrix {
-    if (!a.IsEqualShape(b)){
+    if (!a.IsEqualShape(b)) {
         throw std::out_of_range("matrix shapes not equal");
     }
     auto matrix = Matrix::EmptyInited(a.matrix_rows, a.matrix_columns);

@@ -111,4 +111,5 @@ private:
     unsigned matrix_rows, matrix_columns;
 };
 
-#endif //MATRIX_CALC_MATRIX_H
+
+#endif  // MATRIX_CALC_MATRIX_H

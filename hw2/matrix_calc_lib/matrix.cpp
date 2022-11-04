@@ -26,7 +26,7 @@ Matrix::Matrix(double **arr, unsigned rows, unsigned columns)
 }
 
 auto Matrix::ValueInited(double value, unsigned rows, unsigned columns) -> Matrix {
-    auto mx = Matrix{};
+    auto matrix = Matrix{};
 
     auto *matrix_arr = new double *[rows];
     for (unsigned i = 0; i < rows; ++i) {
@@ -36,26 +36,26 @@ auto Matrix::ValueInited(double value, unsigned rows, unsigned columns) -> Matri
         }
     }
 
-    mx.matrix_arr = matrix_arr;
-    mx.matrix_rows = rows;
-    mx.matrix_columns = columns;
+    matrix.matrix_arr = matrix_arr;
+    matrix.matrix_rows = rows;
+    matrix.matrix_columns = columns;
 
-    return mx;
+    return matrix;
 }
 
-auto Matrix::EmptyInited(unsigned int rows, unsigned int columns) -> Matrix {
-    auto mx = Matrix{};
+auto Matrix::EmptyInited(unsigned rows, unsigned columns) -> Matrix {
+    auto matrix = Matrix{};
 
     auto *matrix_arr = new double *[rows];
     for (unsigned i = 0; i < rows; ++i) {
         matrix_arr[i] = new double[columns];
     }
 
-    mx.matrix_arr = matrix_arr;
-    mx.matrix_rows = rows;
-    mx.matrix_columns = columns;
+    matrix.matrix_arr = matrix_arr;
+    matrix.matrix_rows = rows;
+    matrix.matrix_columns = columns;
 
-    return mx;
+    return matrix;
 }
 
 
@@ -119,38 +119,38 @@ auto Matrix::Transpose() -> Matrix {
 }
 
 
-auto Matrix::VerticalStack(const Matrix &a, const Matrix &b) -> Matrix {
-    if (a.matrix_columns != b.matrix_columns) {
+auto Matrix::VerticalStack(const Matrix &matrix_a, const Matrix &matrix_b) -> Matrix {
+    if (matrix_a.matrix_columns != matrix_b.matrix_columns) {
         throw std::range_error("vertical stacked elements must have equal columns length");
     }
-    auto matrix = Matrix::EmptyInited(a.matrix_rows + b.matrix_rows, a.matrix_columns);
-    for (unsigned i = 0; i < a.matrix_rows; ++i) {
-        for (unsigned j = 0; j < a.matrix_columns; ++j) {
-            matrix.matrix_arr[i][j] = a.matrix_arr[i][j];
+    auto matrix = Matrix::EmptyInited(matrix_a.matrix_rows + matrix_b.matrix_rows, matrix_a.matrix_columns);
+    for (unsigned i = 0; i < matrix_a.matrix_rows; ++i) {
+        for (unsigned j = 0; j < matrix_a.matrix_columns; ++j) {
+            matrix.matrix_arr[i][j] = matrix_a.matrix_arr[i][j];
         }
     }
-    for (unsigned i = 0; i < b.matrix_rows; ++i) {
-        for (unsigned j = 0; j < a.matrix_columns; ++j) {
-            matrix.matrix_arr[i + a.matrix_rows][j] = b.matrix_arr[i][j];
+    for (unsigned i = 0; i < matrix_b.matrix_rows; ++i) {
+        for (unsigned j = 0; j < matrix_a.matrix_columns; ++j) {
+            matrix.matrix_arr[i + matrix_a.matrix_rows][j] = matrix_b.matrix_arr[i][j];
         }
     }
     return matrix;
 }
 
-auto Matrix::HorizontalStack(const Matrix &a, const Matrix &b) -> Matrix {
-    if (a.matrix_rows != b.matrix_rows) {
+auto Matrix::HorizontalStack(const Matrix &matrix_a, const Matrix &matrix_b) -> Matrix {
+    if (matrix_a.matrix_rows != matrix_b.matrix_rows) {
         throw std::range_error("vertical stacked elements must have equal rows length");
     }
-    auto matrix = Matrix::EmptyInited(a.matrix_rows, a.matrix_columns + b.matrix_columns);
+    auto matrix = Matrix::EmptyInited(matrix_a.matrix_rows, matrix_a.matrix_columns + matrix_b.matrix_columns);
 
-    for (unsigned i = 0; i < a.matrix_rows; ++i) {
-        for (unsigned j = 0; j < a.matrix_columns; ++j) {
-            matrix.matrix_arr[i][j] = a.matrix_arr[i][j];
+    for (unsigned i = 0; i < matrix_a.matrix_rows; ++i) {
+        for (unsigned j = 0; j < matrix_a.matrix_columns; ++j) {
+            matrix.matrix_arr[i][j] = matrix_a.matrix_arr[i][j];
         }
     }
-    for (unsigned i = 0; i < b.matrix_rows; ++i) {
-        for (unsigned j = 0; j < a.matrix_columns; ++j) {
-            matrix.matrix_arr[i][j + a.matrix_columns] = b.matrix_arr[i][j];
+    for (unsigned i = 0; i < matrix_b.matrix_rows; ++i) {
+        for (unsigned j = 0; j < matrix_a.matrix_columns; ++j) {
+            matrix.matrix_arr[i][j + matrix_a.matrix_columns] = matrix_b.matrix_arr[i][j];
         }
     }
     return matrix;

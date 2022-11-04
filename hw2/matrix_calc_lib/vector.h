@@ -25,4 +25,4 @@ public:
 };
 
 
-#endif //MATRIX_CALC_VECTOR_H
+#endif  // MATRIX_CALC_VECTOR_H

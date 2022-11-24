@@ -10,31 +10,25 @@ namespace hw3 {
         using difference_type = std::ptrdiff_t;
         using value_type = I;
 
-        SetIterator();
-        SetIterator(auto ptr) : _ptr(ptr) {}
+        SetIterator() = default;
+        explicit SetIterator(const value_type *ptr) : _ptr{ptr} {}
 
-        auto &operator=(const auto &);
+        auto &operator=(const auto &other);
         auto operator*() const { return *_ptr; }
         auto operator->() { return _ptr; }
-        SetIterator &operator++() {
-            _ptr++;
-            return *this;
-        }
-        SetIterator operator++(int) {
-            SetIterator tmp = *this;
-            ++(*this);
-            return tmp;
-        }
+        auto &operator++();
+        auto operator++(int);
         friend bool operator==(const SetIterator &a, const SetIterator &b) { return a._ptr == b._ptr; };
         friend bool operator!=(const SetIterator &a, const SetIterator &b) { return a._ptr != b._ptr; };
 //        friend auto operator<=>(SetIterator, SetIterator) = default;
 
-        SetIterator &operator--();
-        SetIterator operator--(int);
-    private:
-        I *_ptr;
-    };
+        auto &operator--();
+        auto operator--(int);
 
+        void swap(const auto &) {};
+    private:
+        const value_type *_ptr;
+    };
 }
 
 #include "set_iterator.hpp"

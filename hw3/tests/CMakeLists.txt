@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.14)
 project(test_container)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 20)
 
 option(USE_SANITIZERS "" ON)
 if (USE_SANITIZERS)
     set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-fprofile-arcs -ftest-coverage -O0 \
-        -Wall -Wpedantic -Wextra -Werror -fsanitize=address,undefined \
+        -Wall -Wpedantic -Wextra -fsanitize=address,undefined \
         -fno-sanitize-recover=all -fsanitize-undefined-trap-on-error")
 else()
     set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-fprofile-arcs -ftest-coverage -O0 \

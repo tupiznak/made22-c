@@ -32,7 +32,7 @@ TEST(SetIterator, Basic) {
         auto begin = hw3::SetIterator<int>{*ptr};
         auto end = hw3::SetIterator<int>{*ptr + 6};
 
-        auto vec_test = std::vector<float>{1, 2, 0, 3, 2, 43};
+        const auto vec_test = std::vector<float>{1, 2, 0, 3, 2, 43};
         auto vec = std::vector<float>(vec_test.begin(), vec_test.end());
         ASSERT_EQ(true, std::equal(vec.begin(), vec.end(), vec_test.begin()));
 

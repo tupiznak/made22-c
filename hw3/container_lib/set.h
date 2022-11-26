@@ -4,6 +4,8 @@
 #include <functional>
 #include <algorithm>
 #include <iostream>
+#include <algorithm>
+#include <ranges>
 
 #include "set_iterator.h"
 
@@ -24,6 +26,8 @@ namespace hw3 {
 
         Set(std::initializer_list<value_type> init);
 
+        void insert(const_reference);
+
 //        SetIterator<reference> begin() { return Iterator(&items[0]); }
 //        SetIterator<reference> end() { return Iterator(&items[100]); }
 //        void print() const {
@@ -31,7 +35,7 @@ namespace hw3 {
 //            std::cout << '\n';
 //        }
     private:
-        value_type items[100];
+        pointer items;
     };
 
 }

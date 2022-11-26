@@ -18,12 +18,11 @@ namespace hw3 {
         auto operator->() { return _ptr; }
         auto &operator++();
         auto operator++(int);
+        auto &operator--();
+        auto operator--(int);
         friend bool operator==(const SetIterator &a, const SetIterator &b) { return a._ptr == b._ptr; };
         friend bool operator!=(const SetIterator &a, const SetIterator &b) { return a._ptr != b._ptr; };
 //        friend auto operator<=>(SetIterator, SetIterator) = default;
-
-        auto &operator--();
-        auto operator--(int);
 
         void swap(const auto &) {};
     private:

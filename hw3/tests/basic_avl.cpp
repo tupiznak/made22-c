@@ -9,18 +9,18 @@
 class Node final {
 public:
     explicit Node(const int &key) : _key(key) {};
-    auto smallRotateRight() noexcept {
-        const auto p = this;
-        const auto q = left;
+    inline auto smallRotateRight() noexcept {
+        auto *const p = this;
+        auto *const q = left;
         p->left = q->right;
         q->right = p;
         p->updateHeight();
         q->updateHeight();
         return q;
     }
-    auto smallRotateLeft() noexcept {
-        const auto p = this;
-        const auto q = right;
+    inline auto smallRotateLeft() noexcept {
+        auto *const p = this;
+        auto *const q = right;
         right = left;
         p->right = q->left;
         q->left = p;
@@ -28,15 +28,15 @@ public:
         q->updateHeight();
         return q;
     }
-    auto bigRotateRight() noexcept {
-        const auto p = this;
-        const auto q = left;
+    inline auto bigRotateRight() noexcept {
+        auto *const p = this;
+        auto *const q = left;
         p->left = q->smallRotateLeft();
         return p->smallRotateRight();
     }
-    auto bigRotateLeft() noexcept {
-        const auto p = this;
-        const auto q = right;
+    inline auto bigRotateLeft() noexcept {
+        auto *const p = this;
+        auto *const q = right;
         p->right = q->smallRotateRight();
         return p->smallRotateLeft();
     }
@@ -51,24 +51,14 @@ public:
         const auto curr_balance = getBalance();
         updateHeight();
         if (curr_balance > 1) {
-            if (right != nullptr && right->getBalance() < 0) {
-                return bigRotateLeft();
-            } else {
-                return smallRotateLeft();
-            }
+            if (right != nullptr && right->getBalance() < 0) { return bigRotateLeft(); }
+            return smallRotateLeft();
         } else if (curr_balance < -1) {
-            if (left != nullptr && left->getBalance() > 0) {
-                return bigRotateRight();
-            } else { return smallRotateRight(); }
+            if (left != nullptr && left->getBalance() > 0) { return bigRotateRight(); }
+            return smallRotateRight();
         }
         return this;
     }
-//    static inline void updateHeight(Node *const vertex) noexcept {
-//        if (vertex == nullptr) { return; }
-//        const auto height_left = getHeight(vertex->left);
-//        const auto height_right = getHeight(vertex->right);
-//        vertex->height = std::max(height_left, height_right) + 1;
-//    }
 
     [[nodiscard]] inline auto getKey() const noexcept -> int { return _key; }
     [[nodiscard]] inline auto getRight() const noexcept -> Node * { return right; }
@@ -76,9 +66,7 @@ public:
     [[nodiscard]] static inline auto getHeight(const Node *const vertex) noexcept -> int {
         return vertex != nullptr ? vertex->height : 0;
     }
-    [[nodiscard]] inline int getBalance() const noexcept {
-        return getHeight(right) - getHeight(left);
-    }
+    [[nodiscard]] inline auto getBalance() const noexcept -> int { return getHeight(right) - getHeight(left); }
 
     static auto insert(Node *curr_vertex, const int &key) -> Node * {
         if (curr_vertex == nullptr) {
@@ -118,23 +106,15 @@ public:
     };
 
     static auto contains(Node *curr_vertex, const int &key) -> Node * {
-        if (curr_vertex == nullptr) {
-            return curr_vertex;
-        } else if (key < curr_vertex->_key) {
-            return contains(curr_vertex->left, key);
-        } else if (key > curr_vertex->_key) {
-            return contains(curr_vertex->right, key);
-        }
+        if (curr_vertex == nullptr) { return curr_vertex; }
+        if (key < curr_vertex->_key) { return contains(curr_vertex->left, key); }
+        else if (key > curr_vertex->_key) { return contains(curr_vertex->right, key); }
         return curr_vertex;
     }
 
     inline static auto findMax(Node *curr_vertex) noexcept -> Node * {
-        if (curr_vertex == nullptr) {
-            return nullptr;
-        }
-        while (curr_vertex->right != nullptr) {
-            curr_vertex = curr_vertex->right;
-        }
+        if (curr_vertex == nullptr) { return nullptr; }
+        while (curr_vertex->right != nullptr) { curr_vertex = curr_vertex->right; }
         return curr_vertex;
     }
 
@@ -159,10 +139,10 @@ public:
     AVL(std::initializer_list<int> init) { std::ranges::for_each(init, [this](const int &el) { insert(el); }); };
     void insert(const int &key) { root = Node::insert(root, key); };
     void erase(const int &key) { root = Node::erase(root, key); };
-    bool contains(const int &key) { return Node::contains(root, key) != nullptr; };
+    auto contains(const int &key) -> bool { return Node::contains(root, key) != nullptr; };
     void printTree() { Node::printTree(root); }
     auto next(const int &key) const -> Node * {
-        auto curr_vertex = root;
+        auto *curr_vertex = root;
         Node *target = nullptr;
         while (curr_vertex != nullptr) {
             if (curr_vertex->getKey() > key) {
@@ -175,7 +155,7 @@ public:
         return target;
     };
     auto prev(const int &key) const -> Node * {
-        auto curr_vertex = root;
+        auto *curr_vertex = root;
         Node *target = nullptr;
         while (curr_vertex != nullptr) {
             if (curr_vertex->getKey() < key) {
@@ -192,7 +172,7 @@ private:
     Node *root{};
 };
 
-int main1() {
+auto main1() -> int {
     auto avl = AVL{};
     std::string line;
     while (std::getline(std::cin, line)) {
@@ -209,7 +189,9 @@ int main1() {
         } else if (line.starts_with("prev ")) {
             const auto res = avl.prev(std::stoi(line.substr(strlen("prev "))));
             std::cout << (res != nullptr ? std::to_string(res->getKey()) : "none") << "\n";
-        } else throw std::runtime_error("");
+        } else {
+            throw std::runtime_error("");
+        }
     }
 };
 

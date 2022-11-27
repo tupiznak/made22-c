@@ -8,6 +8,7 @@
 #include <ranges>
 
 #include "set_iterator.h"
+#include "node.h"
 
 namespace hw3 {
     template<class T>
@@ -23,19 +24,50 @@ namespace hw3 {
         using const_pointer = const T *;
 
         Set() = default;
-
         Set(std::initializer_list<value_type> init);
 
-        void insert(const_reference);
+        void insert(const_reference key) {
+            auto *const tree = Node<value_type>::insert(root, key);
+            if (tree == nullptr) { return; }
+            root = tree;
+            ++elements_count;
+        };
+        void erase(const_reference key) {
+            root = Node<value_type>::erase(root, key);
+            --elements_count;
+        };
+        auto contains(const_reference key) -> bool { return Node<value_type>::contains(root, key) != nullptr; };
+        void printTree() { Node<value_type>::printTree(root); }
+        auto next(const_reference key) const -> Node<value_type> * {
+            auto *curr_vertex = root;
+            Node<value_type> *target = nullptr;
+            while (curr_vertex != nullptr) {
+                if (curr_vertex->getKey() > key) {
+                    target = curr_vertex;
+                    curr_vertex = curr_vertex->getLeft();
+                } else {
+                    curr_vertex = curr_vertex->getRight();
+                }
+            }
+            return target;
+        };
+        auto prev(const_reference key) const -> Node<value_type> * {
+            auto *curr_vertex = root;
+            Node<value_type> *target = nullptr;
+            while (curr_vertex != nullptr) {
+                if (curr_vertex->getKey() < key) {
+                    target = curr_vertex;
+                    curr_vertex = curr_vertex->getRight();
+                } else {
+                    curr_vertex = curr_vertex->getLeft();
+                }
+            }
+            return target;
+        };
 
-//        SetIterator<reference> begin() { return Iterator(&items[0]); }
-//        SetIterator<reference> end() { return Iterator(&items[100]); }
-//        void print() const {
-//            std::ranges::for_each(stl_set, [](const auto &el) { std::cout << el << ' '; });
-//            std::cout << '\n';
-//        }
     private:
-        pointer items;
+        Node<value_type> *root{};
+        unsigned elements_count{0};
     };
 
 }

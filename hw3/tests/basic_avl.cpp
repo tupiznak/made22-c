@@ -4,10 +4,82 @@
 #include <ranges>
 #include <iostream>
 #include <cstring>
+#include <numeric>
 
 class Node final {
 public:
     explicit Node(const int &key) : _key(key) {};
+    auto smallRotateRight() noexcept {
+        const auto p = this;
+        const auto q = left;
+        p->left = q->right;
+        q->right = p;
+        p->updateHeight();
+        q->updateHeight();
+        return q;
+    }
+    auto smallRotateLeft() noexcept {
+        const auto p = this;
+        const auto q = right;
+        right = left;
+        p->right = q->left;
+        q->left = p;
+        p->updateHeight();
+        q->updateHeight();
+        return q;
+    }
+    auto bigRotateRight() noexcept {
+        const auto p = this;
+        const auto q = left;
+        p->left = q->smallRotateLeft();
+        return p->smallRotateRight();
+    }
+    auto bigRotateLeft() noexcept {
+        const auto p = this;
+        const auto q = right;
+        p->right = q->smallRotateRight();
+        return p->smallRotateLeft();
+    }
+
+    inline void updateHeight() noexcept {
+        const auto height_left = getHeight(left);
+        const auto height_right = getHeight(right);
+        height = std::max(height_left, height_right) + 1;
+    }
+
+    auto balance() -> Node * {
+        const auto curr_balance = getBalance();
+        updateHeight();
+        if (curr_balance > 1) {
+            if (right != nullptr && right->getBalance() < 0) {
+                return bigRotateLeft();
+            } else {
+                return smallRotateLeft();
+            }
+        } else if (curr_balance < -1) {
+            if (left != nullptr && left->getBalance() > 0) {
+                return bigRotateRight();
+            } else { return smallRotateRight(); }
+        }
+        return this;
+    }
+//    static inline void updateHeight(Node *const vertex) noexcept {
+//        if (vertex == nullptr) { return; }
+//        const auto height_left = getHeight(vertex->left);
+//        const auto height_right = getHeight(vertex->right);
+//        vertex->height = std::max(height_left, height_right) + 1;
+//    }
+
+    [[nodiscard]] inline auto getKey() const noexcept -> int { return _key; }
+    [[nodiscard]] inline auto getRight() const noexcept -> Node * { return right; }
+    [[nodiscard]] inline auto getLeft() const noexcept -> Node * { return left; }
+    [[nodiscard]] static inline auto getHeight(const Node *const vertex) noexcept -> int {
+        return vertex != nullptr ? vertex->height : 0;
+    }
+    [[nodiscard]] inline int getBalance() const noexcept {
+        return getHeight(right) - getHeight(left);
+    }
+
     static auto insert(Node *curr_vertex, const int &key) -> Node * {
         if (curr_vertex == nullptr) {
             curr_vertex = new Node(key);
@@ -18,12 +90,10 @@ public:
         } else if (key > curr_vertex->_key) {
             curr_vertex->right = insert(curr_vertex->right, key);
         }
-        return curr_vertex;
+        return curr_vertex->balance();
     };
     static auto erase(Node *curr_vertex, const int &key) -> Node * {
-        if (curr_vertex == nullptr) {
-            return nullptr;
-        }
+        if (curr_vertex == nullptr) { return nullptr; }
         if (key < curr_vertex->_key) {
             curr_vertex->left = erase(curr_vertex->left, key);
         } else if (key > curr_vertex->_key) {
@@ -43,7 +113,8 @@ public:
             curr_vertex->_key = findMax(curr_vertex->left)->_key;
             curr_vertex->left = erase(curr_vertex->left, curr_vertex->_key);
         }
-        return curr_vertex;
+        if (curr_vertex == nullptr) { return nullptr; }
+        return curr_vertex->balance();
     };
 
     static auto contains(Node *curr_vertex, const int &key) -> Node * {
@@ -67,31 +138,17 @@ public:
         return curr_vertex;
     }
 
-    inline static auto findMin(Node *curr_vertex) noexcept -> Node * {
-        if (curr_vertex == nullptr) {
-            return nullptr;
-        }
-        while (curr_vertex->left != nullptr) {
-            curr_vertex = curr_vertex->left;
-        }
-        return curr_vertex;
-    }
-
     static void printTree(Node *curr_vertex) noexcept {
-        if (curr_vertex == nullptr) {
-            return;
-        }
+        if (curr_vertex == nullptr) { return; }
         printTree(curr_vertex->left);
         std::cout << curr_vertex->_key << " ";
         printTree(curr_vertex->right);
     }
 
-    inline auto getKey() const noexcept -> int { return _key; }
-    inline auto getRight() const noexcept -> Node * { return right; }
-    inline auto getLeft() const noexcept -> Node * { return left; }
 
 private:
     int _key;
+    int height{1};
     Node *left{};
     Node *right{};
 };
@@ -157,24 +214,37 @@ int main1() {
 };
 
 TEST(BasicAvl, Check) {
-    auto avl = AVL{2, 3, 4, 5, 1, 0};
-    avl.insert(4);
-    avl.printTree();
-    EXPECT_EQ(true, avl.contains(3));
-    EXPECT_EQ(false, avl.contains(30));
-    EXPECT_EQ(nullptr, avl.next(30));
-    EXPECT_EQ(4, avl.next(3)->getKey());
-    EXPECT_EQ(2, avl.next(1)->getKey());
-    EXPECT_EQ(3, avl.next(2)->getKey());
-    EXPECT_EQ(nullptr, avl.next(5));
-    EXPECT_EQ(5, avl.next(4)->getKey());
-    EXPECT_EQ(1, avl.next(0)->getKey());
+    {
+        std::vector<int> x(70);
+        std::iota(std::begin(x), std::end(x), 0);
+        auto avl = AVL{};
+        std::ranges::for_each(x, [&](const int &el) { avl.insert(el); });
+        avl.printTree();
+    }
+    {
+        auto avl = AVL{2, 3, 4, 5, 1, 0};
+        avl.insert(4);
+        avl.printTree();
+        EXPECT_EQ(true, avl.contains(3));
+        EXPECT_EQ(false, avl.contains(30));
+        EXPECT_EQ(nullptr, avl.next(30));
+        EXPECT_EQ(4, avl.next(3)->getKey());
+        EXPECT_EQ(2, avl.next(1)->getKey());
+        EXPECT_EQ(3, avl.next(2)->getKey());
+        EXPECT_EQ(nullptr, avl.next(5));
+        EXPECT_EQ(5, avl.next(4)->getKey());
+        EXPECT_EQ(1, avl.next(0)->getKey());
 
-    EXPECT_EQ(2, avl.prev(3)->getKey());
-    EXPECT_EQ(nullptr, avl.prev(0));
-    EXPECT_EQ(0, avl.prev(1)->getKey());
-    EXPECT_EQ(1, avl.prev(2)->getKey());
-    EXPECT_EQ(4, avl.prev(5)->getKey());
-    EXPECT_EQ(3, avl.prev(4)->getKey());
-    EXPECT_EQ(2, avl.prev(3)->getKey());
+        EXPECT_EQ(2, avl.prev(3)->getKey());
+        EXPECT_EQ(nullptr, avl.prev(0));
+        EXPECT_EQ(0, avl.prev(1)->getKey());
+        EXPECT_EQ(1, avl.prev(2)->getKey());
+        EXPECT_EQ(4, avl.prev(5)->getKey());
+        EXPECT_EQ(3, avl.prev(4)->getKey());
+        EXPECT_EQ(2, avl.prev(3)->getKey());
+    }
+    {
+        auto avl = AVL{2, 3, 4, 5, 1, 0};
+        avl.insert(3);
+    }
 }

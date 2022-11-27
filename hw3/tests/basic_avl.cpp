@@ -43,6 +43,9 @@ public:
     inline void updateHeight() noexcept {
         const auto height_left = getHeight(left);
         const auto height_right = getHeight(right);
+        const auto size_left = getSize(left);
+        const auto size_right = getSize(right);
+        size = size_left + size_right + 1;
         height = std::max(height_left, height_right) + 1;
     }
 
@@ -64,6 +67,9 @@ public:
     [[nodiscard]] inline auto getLeft() const noexcept -> Node * { return left; }
     [[nodiscard]] static inline auto getHeight(const Node *const vertex) noexcept -> int {
         return vertex != nullptr ? vertex->height : 0;
+    }
+    [[nodiscard]] static inline auto getSize(const Node *const vertex) noexcept -> int {
+        return vertex != nullptr ? vertex->size : 0;
     }
     [[nodiscard]] inline auto getBalance() const noexcept -> int { return getHeight(right) - getHeight(left); }
 
@@ -116,6 +122,11 @@ public:
         while (curr_vertex->right != nullptr) { curr_vertex = curr_vertex->right; }
         return curr_vertex;
     }
+    [[nodiscard]] auto findK(const int &k) const noexcept -> const Node * {
+        if (getSize(left) + 1 == k) { return this; }
+        if (k > getSize(left) + 1) { return right->findK(k - getSize(left) - 1); }
+        return left->findK(k);
+    }
 
     static void printTree(Node *curr_vertex) noexcept {
         if (curr_vertex == nullptr) { return; }
@@ -130,14 +141,21 @@ private:
     int height{1};
     Node *left{};
     Node *right{};
+    int size{1};
 };
 
 class AVL final {
 public:
     AVL() = default;
     AVL(std::initializer_list<int> init) { std::ranges::for_each(init, [this](const int &el) { insert(el); }); };
-    void insert(const int &key) { root = Node::insert(root, key); };
-    void erase(const int &key) { root = Node::erase(root, key); };
+    void insert(const int &key) {
+        ++elements_count;
+        root = Node::insert(root, key);
+    };
+    void erase(const int &key) {
+        --elements_count;
+        root = Node::erase(root, key);
+    };
     auto contains(const int &key) -> bool { return Node::contains(root, key) != nullptr; };
     void printTree() { Node::printTree(root); }
     auto next(const int &key) const -> Node * {
@@ -166,28 +184,25 @@ public:
         }
         return target;
     };
+    int findKMax(const int &k) { return root->findK(elements_count - k + 1)->getKey(); }
 
 private:
     Node *root{};
+    int elements_count{0};
 };
 
 auto main1() -> int {
     auto avl = AVL{};
     std::string line;
+    std::getline(std::cin, line);
     while (std::getline(std::cin, line)) {
-        if (line.starts_with("insert ")) {
-            avl.insert(std::stoi(line.substr(strlen("insert "))));
-        } else if (line.starts_with("delete ")) {
-            avl.erase(std::stoi(line.substr(strlen("delete "))));
-        } else if (line.starts_with("exists ")) {
-            const auto res = avl.contains(std::stoi(line.substr(strlen("exists "))));
-            std::cout << (res ? "true" : "false") << "\n";
-        } else if (line.starts_with("next ")) {
-            const auto res = avl.next(std::stoi(line.substr(strlen("next "))));
-            std::cout << (res != nullptr ? std::to_string(res->getKey()) : "none") << "\n";
-        } else if (line.starts_with("prev ")) {
-            const auto res = avl.prev(std::stoi(line.substr(strlen("prev "))));
-            std::cout << (res != nullptr ? std::to_string(res->getKey()) : "none") << "\n";
+        if (line.starts_with("1 ")) {
+            avl.insert(std::stoi(line.substr(strlen("1 "))));
+        } else if (line.starts_with("-1 ")) {
+            avl.erase(std::stoi(line.substr(strlen("-1 "))));
+        } else if (line.starts_with("0 ")) {
+            const auto res = avl.findKMax(std::stoi(line.substr(strlen("0 "))));
+            std::cout << res << "\n";
         } else {
             throw std::runtime_error("");
         }
@@ -196,11 +211,12 @@ auto main1() -> int {
 
 TEST(BasicAvl, Check) {
     {
-        std::vector<int> x(70);
+        std::vector<int> x(7);
         std::iota(std::begin(x), std::end(x), 0);
         auto avl = AVL{};
         std::ranges::for_each(x, [&](const int &el) { avl.insert(el); });
         avl.printTree();
+        std::cout << "\n" << avl.findKMax(7) << "\n";
     }
     {
         auto avl = AVL{2, 3, 4, 5, 1, 0};

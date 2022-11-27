@@ -21,7 +21,6 @@ public:
     inline auto smallRotateLeft() noexcept {
         auto *const p = this;
         auto *const q = right;
-        right = left;
         p->right = q->left;
         q->left = p;
         p->updateHeight();

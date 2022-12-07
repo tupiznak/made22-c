@@ -17,6 +17,10 @@ namespace hw3 {
         using const_reference = const T &;
 
         explicit Node(const_reference key, Node *parent) : _key(key), parent{parent} {};
+        ~Node() {
+            delete left;
+            delete right;
+        }
         inline auto smallRotateRight() noexcept {
             auto *const p = this;
             auto *const q = left;

@@ -33,6 +33,7 @@ namespace hw3 {
         Set(BidirectionalIt begin, BidirectionalIt end) {
             std::ranges::for_each(begin, end, [&](const auto &el) { insert(el); });
         }
+        ~Set() { delete root; }
 
         void insert(const_reference key) {
             auto *const tree = Node<value_type>::insert(root, nullptr, key);
@@ -73,8 +74,8 @@ namespace hw3 {
             return target;
         };
 
-        auto begin() { return SetIterator<value_type>(Node<value_type>::findMin(root)); }
-        auto end() { return ++SetIterator<value_type>(Node<value_type>::findMax(root)); }
+        auto begin() const { return SetIterator<value_type>(Node<value_type>::findMin(root)); }
+        auto end() const { return ++SetIterator<value_type>(Node<value_type>::findMax(root)); }
     private:
         Node<value_type> *root{};
         unsigned elements_count{0};

@@ -18,16 +18,15 @@ TEST(Set, InitializerList) {
     set.erase(3);
 }
 
-TEST(Set, EqSTL) {
+TEST(Set, EqSTLInit) {
     std::mt19937 gen(0);
     std::uniform_real_distribution<> dis(-100, 500);
     const auto stl_set = [&]() {
-        std::array<int, 300> arr;
         std::set<int> stl_set;
-        for (auto &el: arr) { stl_set.insert(dis(gen)); }
+        for (int i: std::views::iota(0, 300)) { stl_set.insert(dis(gen)); }
         return stl_set;
     }();
 
-    auto set = hw3::Set<int>(stl_set.begin(), stl_set.end());
+    const auto set = hw3::Set<int>(stl_set.begin(), stl_set.end());
     EXPECT_EQ(true, std::ranges::equal(set, stl_set));
 }

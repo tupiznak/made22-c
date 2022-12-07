@@ -6,6 +6,7 @@
 #include <iostream>
 #include <algorithm>
 #include <ranges>
+#include <iterator>
 
 #include "set_iterator.h"
 #include "node.h"
@@ -25,6 +26,13 @@ namespace hw3 {
 
         Set() = default;
         Set(std::initializer_list<value_type> init);
+        Set(const SetIterator<T> &begin, const SetIterator<T> &end) {
+            std::ranges::for_each(begin, end, [&](const auto &el) { insert(el); });
+        }
+        template<class BidirectionalIt>
+        Set(BidirectionalIt begin, BidirectionalIt end) {
+            std::ranges::for_each(begin, end, [&](const auto &el) { insert(el); });
+        }
 
         void insert(const_reference key) {
             auto *const tree = Node<value_type>::insert(root, nullptr, key);

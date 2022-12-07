@@ -12,7 +12,7 @@ namespace hw3 {
         using value_type = I;
 
         SetIterator() = default;
-        explicit SetIterator(const Node<I> *ptr) : _ptr{ptr} {}
+        explicit SetIterator(const Node<value_type> *ptr) : _ptr{ptr} {}
 
         auto &operator=(const auto &other);
         auto operator*() const { return _ptr->getKey(); }
@@ -26,7 +26,7 @@ namespace hw3 {
 
         void swap(const auto &) {};
     private:
-        const Node<I> *_ptr;
+        const Node<value_type> *_ptr;
     };
 }
 

@@ -80,6 +80,7 @@ namespace hw3 {
         [[nodiscard]] inline auto getKey() const noexcept -> const_reference { return _key; }
         [[nodiscard]] inline auto getRight() const noexcept -> Node * { return right; }
         [[nodiscard]] inline auto getLeft() const noexcept -> Node * { return left; }
+        [[nodiscard]] inline auto getParent() const noexcept -> Node * { return parent; }
         [[nodiscard]] static inline auto getHeight(const Node *const vertex) noexcept -> unsigned {
             return vertex != nullptr ? vertex->height : 0;
         }
@@ -178,7 +179,7 @@ namespace hw3 {
         }
 
 
-//    private:
+    private:
         value_type _key;
         unsigned height{1};
         Node *left{};

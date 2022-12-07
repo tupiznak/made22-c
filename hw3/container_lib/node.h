@@ -18,8 +18,8 @@ namespace hw3 {
 
         explicit Node(const_reference key, Node *parent) : _key(key), parent{parent} {};
         ~Node() {
-            delete left;
-            delete right;
+            if (left != nullptr) { delete left; }
+            if (right != nullptr) { delete right; }
         }
         inline auto smallRotateRight() noexcept {
             auto *const p = this;
@@ -120,12 +120,14 @@ namespace hw3 {
                 auto *right = curr_vertex->right;
                 parent_vertex->left == curr_vertex ? parent_vertex->left = right : parent_vertex->right = right;
                 right->parent = parent_vertex;
+                curr_vertex->right = nullptr;
                 delete curr_vertex;
                 curr_vertex = right;
             } else if (curr_vertex->right == nullptr) {
                 auto *left = curr_vertex->left;
                 parent_vertex->left == curr_vertex ? parent_vertex->left = left : parent_vertex->right = left;
                 left->parent = parent_vertex;
+                curr_vertex->left = nullptr;
                 delete curr_vertex;
                 curr_vertex = left;
             } else {

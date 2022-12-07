@@ -109,10 +109,12 @@ public:
             curr_vertex = nullptr;
         } else if (curr_vertex->left == nullptr) {
             auto *right = curr_vertex->right;
+            curr_vertex->right = nullptr;
             delete curr_vertex;
             curr_vertex = right;
         } else if (curr_vertex->right == nullptr) {
             auto *left = curr_vertex->left;
+            curr_vertex->left = nullptr;
             delete curr_vertex;
             curr_vertex = left;
         } else {

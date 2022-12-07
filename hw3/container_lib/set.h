@@ -42,6 +42,7 @@ namespace hw3 {
             ++elements_count;
         };
         void erase(const_reference key) {
+            if (!contains(key)) { return; }
             root = Node<value_type>::erase(root, nullptr, key);
             --elements_count;
         };
@@ -74,8 +75,15 @@ namespace hw3 {
             return target;
         };
 
+        auto size() const { return elements_count; }
+        auto empty() const { return size() == 0; }
+
         auto begin() const { return SetIterator<value_type>(Node<value_type>::findMin(root)); }
         auto end() const { return ++SetIterator<value_type>(Node<value_type>::findMax(root)); }
+        auto find(const_reference key) const {
+            const auto *vertex = Node<value_type>::contains(root, key);
+            return vertex != nullptr ? SetIterator<value_type>(vertex) : end();
+        }
     private:
         Node<value_type> *root{};
         unsigned elements_count{0};

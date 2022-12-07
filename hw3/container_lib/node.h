@@ -178,7 +178,7 @@ namespace hw3 {
         }
 
 
-    private:
+//    private:
         value_type _key;
         unsigned height{1};
         Node *left{};

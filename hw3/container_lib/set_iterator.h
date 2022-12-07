@@ -2,6 +2,7 @@
 #define CONTAINER_SET_ITERATOR_H
 
 #include <iterator>
+#include "node.h"
 
 namespace hw3 {
     template<class I>
@@ -11,10 +12,10 @@ namespace hw3 {
         using value_type = I;
 
         SetIterator() = default;
-        explicit SetIterator(const value_type *ptr) : _ptr{ptr} {}
+        explicit SetIterator(const Node<I> *ptr) : _ptr{ptr} {}
 
         auto &operator=(const auto &other);
-        auto operator*() const { return *_ptr; }
+        auto operator*() const { return _ptr->getKey(); }
         auto operator->() { return _ptr; }
         auto &operator++();
         auto operator++(int);
@@ -25,7 +26,7 @@ namespace hw3 {
 
         void swap(const auto &) {};
     private:
-        const value_type *_ptr;
+        const Node<I> *_ptr;
     };
 }
 

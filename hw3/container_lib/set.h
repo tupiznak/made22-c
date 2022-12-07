@@ -65,8 +65,8 @@ namespace hw3 {
             return target;
         };
 
-        auto begin() { return Node<value_type>::findMin(root); }
-        auto end() { return Node<value_type>::findMax(root); }
+        auto begin() { return SetIterator<value_type>(Node<value_type>::findMin(root)); }
+        auto end() { return ++SetIterator<value_type>(Node<value_type>::findMax(root)); }
     private:
         Node<value_type> *root{};
         unsigned elements_count{0};

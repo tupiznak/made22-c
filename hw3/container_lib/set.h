@@ -27,18 +27,31 @@ namespace hw3 {
         Set(std::initializer_list<value_type> init);
 
         void insert(const_reference key) {
-            auto *const tree = Node<value_type>::insert(root, key);
+            auto *const tree = Node<value_type>::insert(root, nullptr, key);
             if (tree == nullptr) { return; }
             root = tree;
             ++elements_count;
         };
         void erase(const_reference key) {
-            root = Node<value_type>::erase(root, key);
+            root = Node<value_type>::erase(root, nullptr, key);
             --elements_count;
         };
         auto contains(const_reference key) -> bool { return Node<value_type>::contains(root, key) != nullptr; };
         void printTree() { Node<value_type>::printTree(root); }
-        auto next(const_reference key) const -> Node<value_type> * {
+        auto lower_bound(const_reference key) const -> Node<value_type> * {
+            auto *curr_vertex = root;
+            Node<value_type> *target = nullptr;
+            while (curr_vertex != nullptr) {
+                if (curr_vertex->getKey() >= key) {
+                    target = curr_vertex;
+                    curr_vertex = curr_vertex->getLeft();
+                } else {
+                    curr_vertex = curr_vertex->getRight();
+                }
+            }
+            return target;
+        };
+        auto upper_bound(const_reference key) const -> Node<value_type> * {
             auto *curr_vertex = root;
             Node<value_type> *target = nullptr;
             while (curr_vertex != nullptr) {
@@ -51,20 +64,9 @@ namespace hw3 {
             }
             return target;
         };
-        auto prev(const_reference key) const -> Node<value_type> * {
-            auto *curr_vertex = root;
-            Node<value_type> *target = nullptr;
-            while (curr_vertex != nullptr) {
-                if (curr_vertex->getKey() < key) {
-                    target = curr_vertex;
-                    curr_vertex = curr_vertex->getRight();
-                } else {
-                    curr_vertex = curr_vertex->getLeft();
-                }
-            }
-            return target;
-        };
 
+        auto begin() { return Node<value_type>::findMin(root); }
+        auto end() { return Node<value_type>::findMax(root); }
     private:
         Node<value_type> *root{};
         unsigned elements_count{0};

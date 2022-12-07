@@ -11,12 +11,17 @@
 
 class Node final {
 public:
-    explicit Node(const int &key) : _key(key) {};
+    explicit Node(const int &key, Node *parent) : _key(key), parent{parent} {};
     inline auto smallRotateRight() noexcept {
         auto *const p = this;
         auto *const q = left;
         p->left = q->right;
         q->right = p;
+
+        if (p->left != nullptr) { p->left->parent = p; }
+        q->parent = p->parent;
+        p->parent = q;
+
         p->updateHeight();
         q->updateHeight();
         return q;
@@ -26,6 +31,11 @@ public:
         auto *const q = right;
         p->right = q->left;
         q->left = p;
+
+        if (p->right != nullptr) { p->right->parent = p; }
+        q->parent = p->parent;
+        p->parent = q;
+
         p->updateHeight();
         q->updateHeight();
         return q;
@@ -76,15 +86,15 @@ public:
     }
     [[nodiscard]] inline auto getBalance() const noexcept -> int { return getHeight(right) - getHeight(left); }
 
-    static auto insert(Node *curr_vertex, const int &key) -> Node * {
+    static auto insert(Node *curr_vertex, Node *parent_vertex, const int &key) -> Node * {
         if (curr_vertex == nullptr) {
-            curr_vertex = new Node(key);
+            curr_vertex = new Node(key, parent_vertex);
             return curr_vertex;
         }
         if (key < curr_vertex->_key) {
-            curr_vertex->left = insert(curr_vertex->left, key);
+            curr_vertex->left = insert(curr_vertex->left, curr_vertex, key);
         } else if (key > curr_vertex->_key) {
-            curr_vertex->right = insert(curr_vertex->right, key);
+            curr_vertex->right = insert(curr_vertex->right, curr_vertex, key);
         }
         return curr_vertex->balance();
     };
@@ -125,6 +135,11 @@ public:
         while (curr_vertex->right != nullptr) { curr_vertex = curr_vertex->right; }
         return curr_vertex;
     }
+    inline static auto findMin(Node *curr_vertex) noexcept -> Node * {
+        if (curr_vertex == nullptr) { return nullptr; }
+        while (curr_vertex->left != nullptr) { curr_vertex = curr_vertex->left; }
+        return curr_vertex;
+    }
     [[nodiscard]] auto findK(const int &k) const noexcept -> const Node * {
         if (getSize(left) + 1 == k) { return this; }
         if (k > getSize(left) + 1) { return right->findK(k - getSize(left) - 1); }
@@ -138,12 +153,35 @@ public:
         printTree(curr_vertex->right);
     }
 
+    const Node *prev() noexcept {
+        if (left != nullptr) { return findMax(left); }
+        if (parent == nullptr || parent->right == this) { return parent; }
+        const auto *curr_vertex = this;
+        while (curr_vertex->parent != nullptr && curr_vertex->parent->left == curr_vertex) {
+            curr_vertex = curr_vertex->parent;
+        }
+        if (curr_vertex->parent == nullptr) { return nullptr; }
+        return curr_vertex->parent;
+    }
+
+    const Node *next() noexcept {
+        if (right != nullptr) { return findMin(right); }
+        if (parent == nullptr || parent->left == this) { return parent; }
+        const auto *curr_vertex = this;
+        while (curr_vertex->parent != nullptr && curr_vertex->parent->right == curr_vertex) {
+            curr_vertex = curr_vertex->parent;
+        }
+        if (curr_vertex->parent == nullptr) { return nullptr; }
+        return curr_vertex->parent;
+    }
+
 
 private:
     int _key;
     int height{1};
     Node *left{};
     Node *right{};
+    Node *parent;
     int size{1};
 };
 
@@ -153,7 +191,7 @@ public:
     AVL(std::initializer_list<int> init) { std::ranges::for_each(init, [this](const int &el) { insert(el); }); };
     void insert(const int &key) {
         ++elements_count;
-        root = Node::insert(root, key);
+        root = Node::insert(root, nullptr, key);
     };
     void erase(const int &key) {
         --elements_count;
@@ -161,20 +199,28 @@ public:
     };
     auto contains(const int &key) -> bool { return Node::contains(root, key) != nullptr; };
     void printTree() { Node::printTree(root); }
-    auto next(const int &key) const -> Node * {
-        auto *curr_vertex = root;
-        Node *target = nullptr;
-        while (curr_vertex != nullptr) {
-            if (curr_vertex->getKey() > key) {
-                target = curr_vertex;
-                curr_vertex = curr_vertex->getLeft();
-            } else {
-                curr_vertex = curr_vertex->getRight();
-            }
-        }
-        return target;
+    auto next(const int &key) const -> const Node * {
+        auto *curr = Node::contains(root, key);
+        if (curr == nullptr) { return nullptr; }
+        return curr->next();
+
+//        auto *curr_vertex = root;
+//        Node *target = nullptr;
+//        while (curr_vertex != nullptr) {
+//            if (curr_vertex->getKey() > key) {
+//                target = curr_vertex;
+//                curr_vertex = curr_vertex->getLeft();
+//            } else {
+//                curr_vertex = curr_vertex->getRight();
+//            }
+//        }
+//        return target;
     };
-    auto prev(const int &key) const -> Node * {
+    auto prev(const int &key) -> const Node * {
+        auto *curr = Node::contains(root, key);
+        if (curr == nullptr) { return nullptr; }
+        return curr->prev();
+
         auto *curr_vertex = root;
         Node *target = nullptr;
         while (curr_vertex != nullptr) {
@@ -197,15 +243,20 @@ private:
 auto main1() -> int {
     auto avl = AVL{};
     std::string line;
-    std::getline(std::cin, line);
     while (std::getline(std::cin, line)) {
-        if (line.starts_with("1 ")) {
-            avl.insert(std::stoi(line.substr(strlen("1 "))));
-        } else if (line.starts_with("-1 ")) {
-            avl.erase(std::stoi(line.substr(strlen("-1 "))));
-        } else if (line.starts_with("0 ")) {
-            const auto res = avl.findKMax(std::stoi(line.substr(strlen("0 "))));
-            std::cout << res << "\n";
+        if (line.starts_with("insert ")) {
+            avl.insert(std::stoi(line.substr(strlen("insert "))));
+        } else if (line.starts_with("delete ")) {
+            avl.erase(std::stoi(line.substr(strlen("delete "))));
+        } else if (line.starts_with("exists ")) {
+            const auto res = avl.contains(std::stoi(line.substr(strlen("exists "))));
+            std::cout << (res ? "true" : "false") << "\n";
+        } else if (line.starts_with("next ")) {
+            const auto res = avl.next(std::stoi(line.substr(strlen("next "))));
+            std::cout << (res != nullptr ? std::to_string(res->getKey()) : "none") << "\n";
+        } else if (line.starts_with("prev ")) {
+            const auto res = avl.prev(std::stoi(line.substr(strlen("prev "))));
+            std::cout << (res != nullptr ? std::to_string(res->getKey()) : "none") << "\n";
         } else {
             throw std::runtime_error("");
         }

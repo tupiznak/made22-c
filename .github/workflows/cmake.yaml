@@ -32,7 +32,7 @@ jobs:
       - name: Coverage
         working-directory: ${{github.workspace}}/hw3/build
         run: |
-          lcov -t "tests/CMakeFiles/test_set" -o coverage.info -c -d container_lib/ \
+          lcov -t "tests/CMakeFiles/test_container.dir" -o coverage.info -c -d tests/CMakeFiles/test_container.dir/ \
           && genhtml -o report coverage.info
 
       - name: Valgrind

@@ -25,7 +25,9 @@ namespace hw3 {
         using const_pointer = const T *;
 
         Set() = default;
-        Set(std::initializer_list<value_type> init);
+        Set(std::initializer_list<value_type> init) {
+            std::ranges::for_each(init, [&](const_reference el) { insert(el); });
+        }
         Set(const SetIterator<T> &begin, const SetIterator<T> &end) {
             std::ranges::for_each(begin, end, [&](const auto &el) { insert(el); });
         }
@@ -106,7 +108,5 @@ namespace hw3 {
     };
 
 }
-
-#include "set.hpp"
 
 #endif //MADE22_C_SET_H

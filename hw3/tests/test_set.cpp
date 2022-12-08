@@ -3,6 +3,13 @@
 #include <random>
 
 
+TEST(Set, Iterator) {
+    auto stl_set = std::set<float>{1, 2, 0, 3, 2};
+    std::set<float>::iterator stl_it;
+    static_assert(std::bidirectional_iterator<std::set<float>::iterator>);
+    static_assert(std::bidirectional_iterator<hw3::SetIterator<float>>);
+}
+
 TEST(Set, InitializerList) {
     const auto stl_set = std::set<float>{1, 2, 3, 9, 0};
     auto set = hw3::Set<float>{1, 2, 3, 9, 0};

@@ -32,13 +32,13 @@ jobs:
       - name: Coverage
         working-directory: ${{github.workspace}}/hw3/build
         run: |
-          lcov -t "tests/CMakeFiles/test_matrix_calc" -o coverage.info -c -d matrix_calc_lib/ \
+          lcov -t "tests/CMakeFiles/test_set" -o coverage.info -c -d container_lib/ \
           && genhtml -o report coverage.info
 
       - name: Valgrind
         working-directory: ${{github.workspace}}/hw3/build
         run: |
-          valgrind --tool=memcheck --leak-check=yes -s --log-fd=1 ./tests/test_matrix_calc > /tmp/valgrind_result \
+          valgrind --tool=memcheck --leak-check=yes -s --log-fd=1 ./tests/test_set > /tmp/valgrind_result \
           && cat /tmp/valgrind_result \
           && ! grep "LEAK SUMMARY" /tmp/valgrind_result \
           && grep "ERROR SUMMARY: 0 errors" /tmp/valgrind_result

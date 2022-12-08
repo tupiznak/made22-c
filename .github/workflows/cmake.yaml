@@ -38,7 +38,7 @@ jobs:
       - name: Valgrind
         working-directory: ${{github.workspace}}/hw3/build
         run: |
-          valgrind --tool=memcheck --leak-check=yes -s --log-fd=1 ./tests/test_set > /tmp/valgrind_result \
+          valgrind --tool=memcheck --leak-check=yes -s --log-fd=1 ./tests/test_container > /tmp/valgrind_result \
           && cat /tmp/valgrind_result \
           && ! grep "LEAK SUMMARY" /tmp/valgrind_result \
           && grep "ERROR SUMMARY: 0 errors" /tmp/valgrind_result

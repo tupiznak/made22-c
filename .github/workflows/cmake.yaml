@@ -29,6 +29,10 @@ jobs:
         working-directory: ${{github.workspace}}/hw3/build
         run: ctest -C ${{env.BUILD_TYPE}} -VV
 
+      - name: TestBase
+        working-directory: ${{github.workspace}}/hw3/build
+        run: g++ -std=c++2b ../test_base.cpp -I ../container_lib && ./a.out
+
       - name: Coverage
         working-directory: ${{github.workspace}}/hw3/build
         run: |

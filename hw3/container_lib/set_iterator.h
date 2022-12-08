@@ -15,7 +15,7 @@ namespace hw3 {
         explicit SetIterator(const Node<value_type> *ptr) : _ptr{ptr}, is_last{ptr == nullptr} {}
 
         auto operator*() const { return _ptr->getKey(); }
-        auto operator->() { return _ptr; }
+        auto operator->() { return &(_ptr->getKey()); }
         auto &operator++();
         auto operator++(int);
         auto &operator--();

@@ -18,7 +18,7 @@ namespace hw3 {
         using value_type = T;
         using reference = T &;
         using const_reference = const T &;
-        using iterator = std::initializer_list<T>;
+        using iterator = SetIterator<T>;
         using const_iterator = std::initializer_list<T>;
         using size_type = size_t;
         using pointer = T *;
@@ -33,7 +33,20 @@ namespace hw3 {
         Set(BidirectionalIt begin, BidirectionalIt end) {
             std::ranges::for_each(begin, end, [&](const auto &el) { insert(el); });
         }
+        Set(const Set<T> &other) {
+            std::ranges::for_each(other, [&](const auto &el) { insert(el); });
+            elements_count = other.elements_count;
+        }
+        Set &operator=(const Set &other) {
+            std::ranges::for_each(other, [&](const auto &el) { insert(el); });
+            elements_count = other.elements_count;
+            return *this;
+        }
         ~Set() { delete root; }
+
+        void swap(const Set &other) {
+
+        }
 
         void insert(const_reference key) {
             auto *const tree = Node<value_type>::insert(root, nullptr, key);
@@ -48,20 +61,21 @@ namespace hw3 {
         };
         auto contains(const_reference key) -> bool { return Node<value_type>::contains(root, key) != nullptr; };
         void printTree() { Node<value_type>::printTree(root); }
-        auto lower_bound(const_reference key) const -> Node<value_type> * {
+        auto lower_bound(const_reference key) const {
             auto *curr_vertex = root;
             Node<value_type> *target = nullptr;
             while (curr_vertex != nullptr) {
-                if (curr_vertex->getKey() >= key) {
+                if (!(curr_vertex->getKey() < key)) {
                     target = curr_vertex;
                     curr_vertex = curr_vertex->getLeft();
                 } else {
                     curr_vertex = curr_vertex->getRight();
                 }
             }
-            return target;
+            if (target == nullptr) { return end(); }
+            return SetIterator<value_type>(target);
         };
-        auto upper_bound(const_reference key) const -> Node<value_type> * {
+        auto upper_bound(const_reference key) const {
             auto *curr_vertex = root;
             Node<value_type> *target = nullptr;
             while (curr_vertex != nullptr) {
@@ -72,14 +86,17 @@ namespace hw3 {
                     curr_vertex = curr_vertex->getRight();
                 }
             }
-            return target;
+            if (target == nullptr) { return end(); }
+            return SetIterator<value_type>(target);
         };
 
         auto size() const { return elements_count; }
         auto empty() const { return size() == 0; }
 
         auto begin() const { return SetIterator<value_type>(Node<value_type>::findMin(root)); }
-        auto end() const { return ++SetIterator<value_type>(Node<value_type>::findMax(root)); }
+        auto end() const {
+            return ++SetIterator<value_type>(Node<value_type>::findMax(root));
+        }
         auto find(const_reference key) const {
             const auto *vertex = Node<value_type>::contains(root, key);
             return vertex != nullptr ? SetIterator<value_type>(vertex) : end();

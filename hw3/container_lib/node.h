@@ -85,6 +85,10 @@ namespace hw3 {
         [[nodiscard]] inline auto getRight() const noexcept -> Node * { return right; }
         [[nodiscard]] inline auto getLeft() const noexcept -> Node * { return left; }
         [[nodiscard]] inline auto getParent() const noexcept -> Node * { return parent; }
+        static auto fakeLast(Node *real_last) noexcept {
+            const auto fake_last = new Node<value_type>(real_last->getKey(), real_last);
+            return fake_last;
+        }
         [[nodiscard]] static inline auto getHeight(const Node *const vertex) noexcept -> unsigned {
             return vertex != nullptr ? vertex->height : 0;
         }
@@ -113,19 +117,25 @@ namespace hw3 {
             } else if (key > curr_vertex->_key) {
                 curr_vertex->right = erase(curr_vertex->right, curr_vertex, key);
             } else if (curr_vertex->right == nullptr && curr_vertex->left == nullptr) {
-                parent_vertex->left == curr_vertex ? parent_vertex->left = nullptr : parent_vertex->right = nullptr;
+                if (parent_vertex) {
+                    parent_vertex->left == curr_vertex ? parent_vertex->left = nullptr : parent_vertex->right = nullptr;
+                }
                 delete curr_vertex;
                 curr_vertex = nullptr;
             } else if (curr_vertex->left == nullptr) {
                 auto *right = curr_vertex->right;
-                parent_vertex->left == curr_vertex ? parent_vertex->left = right : parent_vertex->right = right;
+                if (parent_vertex) {
+                    parent_vertex->left == curr_vertex ? parent_vertex->left = right : parent_vertex->right = right;
+                }
                 right->parent = parent_vertex;
                 curr_vertex->right = nullptr;
                 delete curr_vertex;
                 curr_vertex = right;
             } else if (curr_vertex->right == nullptr) {
                 auto *left = curr_vertex->left;
-                parent_vertex->left == curr_vertex ? parent_vertex->left = left : parent_vertex->right = left;
+                if (parent_vertex) {
+                    parent_vertex->left == curr_vertex ? parent_vertex->left = left : parent_vertex->right = left;
+                }
                 left->parent = parent_vertex;
                 curr_vertex->left = nullptr;
                 delete curr_vertex;

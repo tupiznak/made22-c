@@ -12,21 +12,24 @@ namespace hw3 {
         using value_type = I;
 
         SetIterator() = default;
-        explicit SetIterator(const Node<value_type> *ptr) : _ptr{ptr} {}
+        explicit SetIterator(const Node<value_type> *ptr) : _ptr{ptr}, is_last{ptr == nullptr} {}
 
-        auto &operator=(const auto &other);
         auto operator*() const { return _ptr->getKey(); }
         auto operator->() { return _ptr; }
         auto &operator++();
         auto operator++(int);
         auto &operator--();
         auto operator--(int);
-        friend bool operator==(const SetIterator &a, const SetIterator &b) { return a._ptr == b._ptr; };
-        friend bool operator!=(const SetIterator &a, const SetIterator &b) { return a._ptr != b._ptr; };
+        friend bool operator==(const SetIterator &a, const SetIterator &b) {
+            return a._ptr == b._ptr && a.is_last == b.is_last;
+        };
+        friend bool operator!=(const SetIterator &a, const SetIterator &b) {
+            return a._ptr != b._ptr || a.is_last != b.is_last;
+        };
 
-        void swap(const auto &) {};
     private:
         const Node<value_type> *_ptr;
+        bool is_last{false};
     };
 }
 

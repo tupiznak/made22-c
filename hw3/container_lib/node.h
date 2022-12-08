@@ -85,10 +85,6 @@ namespace hw3 {
         [[nodiscard]] inline auto getRight() const noexcept -> Node * { return right; }
         [[nodiscard]] inline auto getLeft() const noexcept -> Node * { return left; }
         [[nodiscard]] inline auto getParent() const noexcept -> Node * { return parent; }
-        static auto fakeLast(Node *real_last) noexcept {
-            const auto fake_last = new Node<value_type>(real_last->getKey(), real_last);
-            return fake_last;
-        }
         [[nodiscard]] static inline auto getHeight(const Node *const vertex) noexcept -> unsigned {
             return vertex != nullptr ? vertex->height : 0;
         }
@@ -103,7 +99,7 @@ namespace hw3 {
                 auto *const sub_tree = insert(curr_vertex->left, curr_vertex, key);
                 if (sub_tree == nullptr) { return nullptr; }
                 curr_vertex->left = sub_tree;
-            } else if (key > curr_vertex->_key) {
+            } else if (curr_vertex->_key < key) {
                 auto *const sub_tree = insert(curr_vertex->right, curr_vertex, key);
                 if (sub_tree == nullptr) { return nullptr; }
                 curr_vertex->right = sub_tree;
@@ -114,7 +110,7 @@ namespace hw3 {
             if (curr_vertex == nullptr) { return nullptr; }
             if (key < curr_vertex->_key) {
                 curr_vertex->left = erase(curr_vertex->left, curr_vertex, key);
-            } else if (key > curr_vertex->_key) {
+            } else if (curr_vertex->_key < key) {
                 curr_vertex->right = erase(curr_vertex->right, curr_vertex, key);
             } else if (curr_vertex->right == nullptr && curr_vertex->left == nullptr) {
                 if (parent_vertex) {
@@ -151,7 +147,7 @@ namespace hw3 {
         static auto contains(Node *curr_vertex, const_reference key) -> Node * {
             if (curr_vertex == nullptr) { return curr_vertex; }
             if (key < curr_vertex->_key) { return contains(curr_vertex->left, key); }
-            else if (key > curr_vertex->_key) { return contains(curr_vertex->right, key); }
+            else if (curr_vertex->_key < key) { return contains(curr_vertex->right, key); }
             return curr_vertex;
         }
 

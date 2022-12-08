@@ -38,15 +38,14 @@ namespace hw3 {
             elements_count = other.elements_count;
         }
         Set &operator=(const Set &other) {
+            if (&other == this) { return *this; }
+            delete root;
+            root = nullptr;
             std::ranges::for_each(other, [&](const auto &el) { insert(el); });
             elements_count = other.elements_count;
             return *this;
         }
         ~Set() { delete root; }
-
-        void swap(const Set &other) {
-
-        }
 
         void insert(const_reference key) {
             auto *const tree = Node<value_type>::insert(root, nullptr, key);

@@ -7,6 +7,7 @@ TEST(Set, InitializerList) {
     const auto stl_set = std::set<float>{1, 2, 3, 9, 0};
     auto set = hw3::Set<float>{1, 2, 3, 9, 0};
     EXPECT_EQ(set.end(), ++set.end());
+    EXPECT_EQ(set.find(-100), set.end());
     set.insert(3);
 
     EXPECT_EQ(*stl_set.lower_bound(4), *set.lower_bound(4));

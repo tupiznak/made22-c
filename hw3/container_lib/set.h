@@ -2,7 +2,6 @@
 #define MADE22_C_SET_H
 
 #include <functional>
-#include <algorithm>
 #include <iostream>
 #include <algorithm>
 #include <ranges>

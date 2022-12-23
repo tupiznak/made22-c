@@ -47,7 +47,7 @@ namespace hw3 {
                 _ptr = _ptr->getParent();
                 return *this;
             }
-            const SetIterator *curr_vertex = _ptr;
+            const auto *curr_vertex = _ptr;
             while (curr_vertex->getParent() != nullptr && curr_vertex->getParent()->getRight() == curr_vertex) {
                 curr_vertex = curr_vertex->getParent();
             }

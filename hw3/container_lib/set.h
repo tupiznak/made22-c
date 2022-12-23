@@ -59,9 +59,9 @@ namespace hw3 {
             root = Node<value_type>::erase(root, nullptr, key);
             --elements_count;
         };
-        auto contains(const_reference key) -> bool { return Node<value_type>::contains(root, key) != nullptr; };
+        bool contains(const_reference key) { return Node<value_type>::contains(root, key) != nullptr; };
         void printTree() { Node<value_type>::printTree(root); }
-        auto lower_bound(const_reference key) const {
+        SetIterator<value_type> lower_bound(const_reference key) const {
             auto *curr_vertex = root;
             Node<value_type> *target = nullptr;
             while (curr_vertex != nullptr) {
@@ -75,7 +75,7 @@ namespace hw3 {
             if (target == nullptr) { return end(); }
             return SetIterator<value_type>(target);
         };
-        auto upper_bound(const_reference key) const {
+        SetIterator<value_type> upper_bound(const_reference key) const {
             auto *curr_vertex = root;
             Node<value_type> *target = nullptr;
             while (curr_vertex != nullptr) {
@@ -90,14 +90,14 @@ namespace hw3 {
             return SetIterator<value_type>(target);
         };
 
-        auto size() const { return elements_count; }
-        auto empty() const { return size() == 0; }
+        unsigned size() const { return elements_count; }
+        bool empty() const { return size() == 0; }
 
-        auto begin() const { return SetIterator<value_type>(Node<value_type>::findMin(root)); }
-        auto end() const {
+        SetIterator<value_type> begin() const { return SetIterator<value_type>(Node<value_type>::findMin(root)); }
+        SetIterator<value_type> end() const {
             return ++SetIterator<value_type>(Node<value_type>::findMax(root));
         }
-        auto find(const_reference key) const {
+        SetIterator<value_type> find(const_reference key) const {
             const auto *vertex = Node<value_type>::contains(root, key);
             return vertex != nullptr ? SetIterator<value_type>(vertex) : end();
         }

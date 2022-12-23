@@ -21,7 +21,7 @@ namespace hw3 {
             if (left != nullptr) { delete left; }
             if (right != nullptr) { delete right; }
         }
-        inline auto smallRotateRight() noexcept {
+        inline Node *smallRotateRight() noexcept {
             auto *const p = this;
             auto *const q = left;
             p->left = q->right;
@@ -35,7 +35,7 @@ namespace hw3 {
             q->updateHeight();
             return q;
         }
-        inline auto smallRotateLeft() noexcept {
+        inline Node *smallRotateLeft() noexcept {
             auto *const p = this;
             auto *const q = right;
             p->right = q->left;
@@ -49,13 +49,13 @@ namespace hw3 {
             q->updateHeight();
             return q;
         }
-        inline auto bigRotateRight() noexcept {
+        inline Node *bigRotateRight() noexcept {
             auto *const p = this;
             auto *const q = left;
             p->left = q->smallRotateLeft();
             return p->smallRotateRight();
         }
-        inline auto bigRotateLeft() noexcept {
+        inline Node *bigRotateLeft() noexcept {
             auto *const p = this;
             auto *const q = right;
             p->right = q->smallRotateRight();
@@ -68,7 +68,7 @@ namespace hw3 {
             height = std::max(height_left, height_right) + 1;
         }
 
-        auto balance() -> Node * {
+        Node *balance() {
             const auto curr_balance = getBalance();
             updateHeight();
             if (curr_balance > 1) {
@@ -81,16 +81,16 @@ namespace hw3 {
             return this;
         }
 
-        [[nodiscard]] inline auto getKey() const noexcept -> const_reference { return _key; }
-        [[nodiscard]] inline auto getRight() const noexcept -> Node * { return right; }
-        [[nodiscard]] inline auto getLeft() const noexcept -> Node * { return left; }
-        [[nodiscard]] inline auto getParent() const noexcept -> Node * { return parent; }
-        [[nodiscard]] static inline auto getHeight(const Node *const vertex) noexcept -> unsigned {
+        inline const_reference getKey() const noexcept { return _key; }
+        inline Node *getRight() const noexcept { return right; }
+        inline Node *getLeft() const noexcept { return left; }
+        inline Node *getParent() const noexcept { return parent; }
+        static inline unsigned getHeight(const Node *const vertex) noexcept {
             return vertex != nullptr ? vertex->height : 0;
         }
-        [[nodiscard]] inline auto getBalance() const noexcept -> int { return getHeight(right) - getHeight(left); }
+        inline int getBalance() const noexcept { return getHeight(right) - getHeight(left); }
 
-        static auto insert(Node *curr_vertex, Node *parent_vertex, const_reference key) -> Node * {
+        static Node *insert(Node *curr_vertex, Node *parent_vertex, const_reference key) {
             if (curr_vertex == nullptr) {
                 curr_vertex = new Node<T>(key, parent_vertex);
                 return curr_vertex;
@@ -106,7 +106,7 @@ namespace hw3 {
             } else { return nullptr; }
             return curr_vertex->balance();
         };
-        static auto erase(Node *curr_vertex, Node *parent_vertex, const_reference key) -> Node * {
+        static Node *erase(Node *curr_vertex, Node *parent_vertex, const_reference key) {
             if (curr_vertex == nullptr) { return nullptr; }
             if (key < curr_vertex->_key) {
                 curr_vertex->left = erase(curr_vertex->left, curr_vertex, key);
@@ -144,20 +144,20 @@ namespace hw3 {
             return curr_vertex->balance();
         };
 
-        static auto contains(Node *curr_vertex, const_reference key) -> Node * {
+        static Node *contains(Node *curr_vertex, const_reference key) {
             if (curr_vertex == nullptr) { return curr_vertex; }
             if (key < curr_vertex->_key) { return contains(curr_vertex->left, key); }
             else if (curr_vertex->_key < key) { return contains(curr_vertex->right, key); }
             return curr_vertex;
         }
 
-        inline static auto findMax(Node *curr_vertex) noexcept -> Node * {
+        inline static Node *findMax(Node *curr_vertex) noexcept {
             if (curr_vertex == nullptr) { return nullptr; }
             while (curr_vertex->right != nullptr) { curr_vertex = curr_vertex->right; }
             return curr_vertex;
         }
 
-        inline static auto findMin(Node *curr_vertex) noexcept -> Node * {
+        inline static Node *findMin(Node *curr_vertex) noexcept {
             if (curr_vertex == nullptr) { return nullptr; }
             while (curr_vertex->left != nullptr) { curr_vertex = curr_vertex->left; }
             return curr_vertex;

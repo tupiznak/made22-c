@@ -54,7 +54,7 @@ TEST(Set, EqSTLInit) {
     std::uniform_real_distribution<> dis(-100, 500);
     const auto stl_set = [&]() {
         std::set<int> stl_set;
-        for ([[maybe_unused]] int i: std::views::iota(0, 300)) { stl_set.insert(dis(gen)); }
+        for (int i: std::views::iota(0, 300)) { stl_set.insert(dis(gen)); }
         return stl_set;
     }();
 
@@ -71,7 +71,7 @@ TEST(Set, EqSTLErase) {
     EXPECT_EQ(true, set.empty());
     EXPECT_EQ(set.begin(), set.end());
 
-    for ([[maybe_unused]] int i: std::views::iota(0, 300)) {
+    for (int i: std::views::iota(0, 300)) {
         const auto el = dis(gen);
         stl_set.insert(el);
         set.insert(el);
@@ -80,7 +80,7 @@ TEST(Set, EqSTLErase) {
     EXPECT_EQ(true, std::ranges::equal(set, stl_set));
     EXPECT_EQ(stl_set.size(), set.size());
 
-    for ([[maybe_unused]] int i: std::views::iota(0, 300)) {
+    for (int i: std::views::iota(0, 300)) {
         const auto el = dis(gen);
         stl_set.erase(el);
         set.erase(el);

@@ -27,10 +27,6 @@ namespace hw3 {
             const auto height_right = getHeight(right);
             height = std::max(height_left, height_right) + 1;
         }
-        inline const_reference getKey() const noexcept { return _key; }
-        inline Node *getRight() const noexcept { return right; }
-        inline Node *getLeft() const noexcept { return left; }
-        inline Node *getParent() const noexcept { return parent; }
         static inline unsigned getHeight(const Node *const vertex) noexcept {
             return vertex != nullptr ? vertex->height : 0;
         }
@@ -70,7 +66,17 @@ namespace hw3 {
 
     private:
         template<class U>
-        friend class Set;
+        friend
+        class Set;
+
+        template<class U>
+        friend
+        class SetIterator;
+
+        inline const_reference getKey() const noexcept { return _key; }
+        inline Node *getRight() const noexcept { return right; }
+        inline Node *getLeft() const noexcept { return left; }
+        inline Node *getParent() const noexcept { return parent; }
 
         value_type _key;
         unsigned height{1};

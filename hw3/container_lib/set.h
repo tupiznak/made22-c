@@ -27,17 +27,11 @@ namespace hw3 {
         Set(std::initializer_list<value_type> init) {
             std::ranges::for_each(init, [&](const_reference el) { insert(el); });
         }
-        Set(const SetIterator<T> &begin, const SetIterator<T> &end) {
-            std::ranges::for_each(begin, end, [&](const auto &el) { insert(el); });
-        }
         template<class BidirectionalIt>
         Set(BidirectionalIt begin, BidirectionalIt end) {
             std::ranges::for_each(begin, end, [&](const auto &el) { insert(el); });
         }
-        Set(const Set<T> &other) {
-            std::ranges::for_each(other, [&](const auto &el) { insert(el); });
-            elements_count = other.elements_count;
-        }
+        Set(const Set<T> &other) : Set(other.begin(), other.end()) {}
         Set &operator=(const Set &other) {
             if (&other == this) { return *this; }
             delete root;

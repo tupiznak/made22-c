@@ -21,9 +21,9 @@ namespace hw3 {
             if (left != nullptr) { delete left; }
             if (right != nullptr) { delete right; }
         }
-        inline Node *smallRotateRight() noexcept {
-            auto *const p = this;
-            auto *const q = left;
+        inline Node *smallRotateRight(Node *joint_vertex) noexcept {
+            auto *const p = joint_vertex;
+            auto *const q = joint_vertex->left;
             p->left = q->right;
             q->right = p;
 
@@ -35,9 +35,9 @@ namespace hw3 {
             q->updateHeight();
             return q;
         }
-        inline Node *smallRotateLeft() noexcept {
-            auto *const p = this;
-            auto *const q = right;
+        inline Node *smallRotateLeft(Node *joint_vertex) noexcept {
+            auto *const p = joint_vertex;
+            auto *const q = joint_vertex->right;
             p->right = q->left;
             q->left = p;
 
@@ -49,17 +49,34 @@ namespace hw3 {
             q->updateHeight();
             return q;
         }
-        inline Node *bigRotateRight() noexcept {
-            auto *const p = this;
-            auto *const q = left;
-            p->left = q->smallRotateLeft();
-            return p->smallRotateRight();
+        inline Node *bigRotateRight(Node *joint_vertex) noexcept {
+            auto *const p = joint_vertex;
+            auto *const q = joint_vertex->left;
+            p->left = q->smallRotateLeft(q);
+            return p->smallRotateRight(p);
         }
-        inline Node *bigRotateLeft() noexcept {
-            auto *const p = this;
-            auto *const q = right;
-            p->right = q->smallRotateRight();
-            return p->smallRotateLeft();
+        inline Node *bigRotateLeft(Node *joint_vertex) noexcept {
+            auto *const p = joint_vertex;
+            auto *const q = joint_vertex->right;
+            p->right = q->smallRotateRight(q);
+            return p->smallRotateLeft(p);
+        }
+
+        Node *balance(Node *joint_vertex) {
+            const auto curr_balance = joint_vertex->getBalance();
+            joint_vertex->updateHeight();
+            if (curr_balance > 1) {
+                if (joint_vertex->right != nullptr && joint_vertex->right->getBalance() < 0) {
+                    return joint_vertex->bigRotateLeft(joint_vertex);
+                }
+                return joint_vertex->smallRotateLeft(this);
+            } else if (curr_balance < -1) {
+                if (joint_vertex->left != nullptr && joint_vertex->left->getBalance() > 0) {
+                    return joint_vertex->bigRotateRight(joint_vertex);
+                }
+                return joint_vertex->smallRotateRight(this);
+            }
+            return this;
         }
 
         inline void updateHeight() noexcept {
@@ -67,20 +84,6 @@ namespace hw3 {
             const auto height_right = getHeight(right);
             height = std::max(height_left, height_right) + 1;
         }
-
-        Node *balance() {
-            const auto curr_balance = getBalance();
-            updateHeight();
-            if (curr_balance > 1) {
-                if (right != nullptr && right->getBalance() < 0) { return bigRotateLeft(); }
-                return smallRotateLeft();
-            } else if (curr_balance < -1) {
-                if (left != nullptr && left->getBalance() > 0) { return bigRotateRight(); }
-                return smallRotateRight();
-            }
-            return this;
-        }
-
         inline const_reference getKey() const noexcept { return _key; }
         inline Node *getRight() const noexcept { return right; }
         inline Node *getLeft() const noexcept { return left; }
@@ -104,7 +107,7 @@ namespace hw3 {
                 if (sub_tree == nullptr) { return nullptr; }
                 curr_vertex->right = sub_tree;
             } else { return nullptr; }
-            return curr_vertex->balance();
+            return curr_vertex->balance(curr_vertex);
         };
         static Node *erase(Node *curr_vertex, Node *parent_vertex, const_reference key) {
             if (curr_vertex == nullptr) { return nullptr; }
@@ -141,7 +144,7 @@ namespace hw3 {
                 curr_vertex->left = erase(curr_vertex->left, curr_vertex, curr_vertex->_key);
             }
             if (curr_vertex == nullptr) { return nullptr; }
-            return curr_vertex->balance();
+            return curr_vertex->balance(curr_vertex);
         };
 
         static Node *contains(Node *curr_vertex, const_reference key) {
